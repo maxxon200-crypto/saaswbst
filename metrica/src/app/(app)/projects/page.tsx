@@ -1,25 +1,31 @@
-import { ButtonLink } from "@/components/ui/Button";
+import { NewProjectDialog } from "@/components/projects/NewProjectDialog";
+import { ProjectsTable } from "@/components/projects/ProjectsTable";
+import { listProjects } from "@/lib/data/projects";
 
-// Milestone 1 shell placeholder. The real project list + creation lands in
-// Milestone 3.
-export default function ProjectsPage() {
+export const dynamic = "force-dynamic";
+
+export default async function ProjectsPage() {
+  const projects = await listProjects();
+
   return (
     <div>
       <header className="flex items-center justify-between gap-4">
         <h1 className="text-page font-semibold text-ink">Projects</h1>
-        <ButtonLink href="/projects" variant="primary">
-          New project
-        </ButtonLink>
+        <NewProjectDialog />
       </header>
 
-      <div className="mt-16 border-t border-line pt-20 text-center">
-        <p className="text-body text-stone">No projects yet.</p>
-        <div className="mt-5 flex justify-center">
-          <ButtonLink href="/projects" variant="secondary">
-            New project
-          </ButtonLink>
+      {projects.length === 0 ? (
+        <div className="mt-16 border-t border-line pt-20 text-center">
+          <p className="text-body text-stone">No projects yet.</p>
+          <div className="mt-5 flex justify-center">
+            <NewProjectDialog />
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="mt-10">
+          <ProjectsTable projects={projects} />
+        </div>
+      )}
     </div>
   );
 }
