@@ -1,0 +1,130 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------ *
+ * Gesso palette — the six tokens. These are the single source of truth
+ * for colour and are mirrored (by reference) into tailwind.config.ts.
+ * No colour outside this block may appear on screen, with the single
+ * flagged exception of --accent-tint below.
+ * ------------------------------------------------------------------ */
+:root {
+  --paper: #f4f4f1; /* page background — cool neutral off-white */
+  --surface: #fbfbf9; /* cards, form fields */
+  --ink: #1c1c1a; /* primary text — never #000 */
+  --stone: #6e6e68; /* secondary text, labels — 4.65:1 on --paper (AA) */
+  --line: #e2e2dd; /* hairline borders, dividers */
+  --accent: #7a2e2e; /* muted oxblood */
+
+  /* FLAGGED EXCEPTION — a lightened oxblood used ONLY for the single accent
+     word in the hero headline, which sits on the dark veil where --accent
+     (#7A2E2E) fails contrast. Not part of the six-token palette; not used
+     anywhere else on the site. */
+  --accent-tint: #b56a6a;
+
+  /* Dark veil over the hero photograph, for text legibility. */
+  --veil: rgba(28, 28, 26, 0.45);
+}
+
+/* ------------------------------------------------------------------ *
+ * Base
+ * ------------------------------------------------------------------ */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: auto; /* Lenis owns smooth scrolling; disabled when JS off */
+  }
+
+  body {
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-satoshi), sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--ink);
+    color: var(--paper);
+  }
+
+  /* Visible, quiet focus ring for keyboard users. */
+  :focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Small, reusable primitives kept token-pure.
+ * ------------------------------------------------------------------ */
+@layer components {
+  /* ALL-CAPS metadata label. --stone is dark enough to read (>= 4.5:1). */
+  .label {
+    font-size: 13px;
+    line-height: 1.4;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--stone);
+    font-weight: 500;
+  }
+
+  /* Underlined link affordance whose only colour move is the accent on hover. */
+  .link-quiet {
+    position: relative;
+    transition: color 0.25s ease;
+  }
+  .link-quiet:hover {
+    color: var(--accent);
+  }
+
+  /* Section shell — consistent horizontal gutters + max width. */
+  .shell {
+    width: 100%;
+    max-width: 1240px;
+    margin-inline: auto;
+    padding-inline: clamp(20px, 5vw, 72px);
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Motion safety.
+ *
+ * Content is ALWAYS visible by default — no element is authored at
+ * opacity:0. GSAP animates FROM a hidden state at runtime only. As a
+ * belt-and-braces guard, users who prefer reduced motion get every
+ * transition/animation collapsed, and Lenis is not initialised in JS.
+ * ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Lenis recommended styles (only take effect once the class is added by JS). */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
