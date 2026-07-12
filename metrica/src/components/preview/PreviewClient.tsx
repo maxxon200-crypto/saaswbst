@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
+import { createShareLink } from "@/lib/data/actions";
 import { DEFAULT_OPTIONS, type SpecBookOptions } from "@/lib/pdf/types";
 
 function Segmented<T extends string>({
@@ -40,6 +41,15 @@ function Segmented<T extends string>({
 
 export function PreviewClient({ projectId }: { projectId: string }) {
   const [opts, setOpts] = useState<SpecBookOptions>(DEFAULT_OPTIONS);
+  const [shareUrl, setShareUrl] = useState<string | null>(null);
+  const [sharing, setSharing] = useState(false);
+
+  async function makeShareLink() {
+    setSharing(true);
+    const res = await createShareLink(projectId);
+    setSharing(false);
+    if (res.ok) setShareUrl(res.data.url);
+  }
 
   const query = useMemo(() => {
     const p = new URLSearchParams({
@@ -134,9 +144,22 @@ export function PreviewClient({ projectId }: { projectId: string }) {
           >
             Export PDF
           </a>
-          <Button variant="secondary" className="w-full" disabled title="Client links arrive in Milestone 6">
-            Create client link
+          <Button
+            variant="secondary"
+            className="w-full"
+            onClick={makeShareLink}
+            disabled={sharing}
+          >
+            {sharing ? "Creating…" : "Create client link"}
           </Button>
+          {shareUrl && (
+            <input
+              readOnly
+              value={shareUrl}
+              onFocus={(e) => e.currentTarget.select()}
+              className="w-full rounded-none border border-line bg-paper px-3 py-2 text-[13px] text-ink outline-none"
+            />
+          )}
         </div>
       </aside>
     </div>

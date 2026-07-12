@@ -190,6 +190,43 @@ export async function addItemFromExtraction(input: {
   return { ok: true, data: { id: itemRow.id } };
 }
 
+/** Enable sharing for a project and return the public approval URL. */
+export async function createShareLink(
+  projectId: string,
+): Promise<ActionResult<{ url: string }>> {
+  const mode = guarded();
+  const base = process.env.NEXT_PUBLIC_APP_URL || "";
+  if (mode === "demo") return { ok: true, data: { url: `${base}/share/demo-share-token` } };
+  if (mode === "unconfigured") return { ok: false, error: "Not configured." };
+
+  const supabase = createSupabaseServerClient();
+  const { data: proj } = await supabase
+    .from("projects")
+    .select("share_token")
+    .eq("id", projectId)
+    .maybeSingle();
+  const token = proj?.share_token ?? crypto.randomUUID();
+  const { error } = await supabase
+    .from("projects")
+    .update({ share_enabled: true, share_token: token })
+    .eq("id", projectId);
+  if (error) return { ok: false, error: error.message };
+  return { ok: true, data: { url: `${base}/share/${token}` } };
+}
+
+/** Revoke a project's share link. */
+export async function revokeShareLink(projectId: string): Promise<ActionResult> {
+  const mode = guarded();
+  if (mode !== "live") return mode === "demo" ? { ok: true } : { ok: false, error: "Not configured." };
+  const supabase = createSupabaseServerClient();
+  const { error } = await supabase
+    .from("projects")
+    .update({ share_enabled: false })
+    .eq("id", projectId);
+  if (error) return { ok: false, error: error.message };
+  return { ok: true };
+}
+
 /** Add an existing library product to a project's first room. */
 export async function addLibraryProductToProject(
   productId: string,
@@ -250,5 +287,29 @@ export async function setItemStatus(
   const { error } = await supabase.from("schedule_items").update({ status }).eq("id", itemId);
   if (error) return { ok: false, error: error.message };
   revalidatePath(`/projects/${projectId}`);
+  return { ok: true };
+}
+
+/**
+ * Public client-approval action (no login). Routes through the SECURITY DEFINER
+ * set_shared_item_status function, which verifies the item belongs to the
+ * token's still-shared project before mutating.
+ */
+export async function setSharedItemStatus(
+  token: string,
+  itemId: string,
+  status: ItemStatus,
+  comment?: string,
+): Promise<ActionResult> {
+  const mode = guarded();
+  if (mode !== "live") return mode === "demo" ? { ok: true } : { ok: false, error: "Not configured." };
+  const supabase = createSupabaseServerClient();
+  const { data, error } = await supabase.rpc("set_shared_item_status", {
+    p_token: token,
+    p_item: itemId,
+    p_status: status,
+    p_comment: comment ?? null,
+  });
+  if (error || data !== true) return { ok: false, error: error?.message ?? "Could not update." };
   return { ok: true };
 }
