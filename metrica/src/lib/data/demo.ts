@@ -101,8 +101,11 @@ function item(
   return {
     id: i.id, project_id: "demo-project", room_id: i.room_id, product_id: i.product.id,
     ref_code: i.ref, qty: i.qty, unit_price: i.product.price_amount, markup_override: null,
-    notes: null, position: i.position, status: i.status ?? "pending",
-    client_comment: i.comment ?? null, created_at: "2026-06-01T00:00:00Z", product: i.product,
+    notes: null, position: i.position, status: i.status ?? "selected",
+    client_comment: i.comment ?? null, created_at: "2026-06-01T00:00:00Z",
+    supplier_name: null, cost: null, markup_pct: null, client_price: null,
+    expected_date: null, actual_date: null, purchase_order_id: null,
+    product: i.product,
   };
 }
 
@@ -115,9 +118,9 @@ const ROOMS: Room[] = [
 const ITEMS: ScheduleItemWithProduct[] = [
   item({ id: "i1", room_id: "r-lr", product: P.camaleonda, ref: "LR-01", qty: 1, position: 0, status: "approved" }),
   item({ id: "i2", room_id: "r-lr", product: P.arco, ref: "LR-02", qty: 1, position: 1, status: "approved" }),
-  item({ id: "i3", room_id: "r-lr", product: P.nuvola, ref: "LR-03", qty: 1, position: 2, status: "pending" }),
+  item({ id: "i3", room_id: "r-lr", product: P.nuvola, ref: "LR-03", qty: 1, position: 2, status: "selected" }),
   item({ id: "i4", room_id: "r-lr", product: P.lc4, ref: "LR-04", qty: 1, position: 3, status: "rejected", comment: "Client prefers the fabric version." }),
-  item({ id: "i5", room_id: "r-kit", product: P.tolomeo, ref: "KIT-01", qty: 2, position: 0, status: "pending" }),
+  item({ id: "i5", room_id: "r-kit", product: P.tolomeo, ref: "KIT-01", qty: 2, position: 0, status: "selected" }),
   item({ id: "i6", room_id: "r-br", product: P.componibili, ref: "BR-01", qty: 2, position: 0, status: "approved" }),
 ];
 

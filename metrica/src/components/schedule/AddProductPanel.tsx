@@ -351,8 +351,10 @@ function buildOptimistic(
   return {
     id, project_id: projectId, room_id: room.id, product_id: id,
     ref_code: `${room.code}-new`, qty: 1, unit_price: num(d.price_amount),
-    markup_override: null, notes: null, position: 999, status: "pending",
+    markup_override: null, notes: null, position: 999, status: "selected",
     client_comment: null, created_at: new Date().toISOString(),
+    supplier_name: null, cost: null, markup_pct: null, client_price: null,
+    expected_date: null, actual_date: null, purchase_order_id: null,
     product: {
       id, studio_id: null, name: d.name, brand: d.brand || null, collection: null,
       designer: d.designer || null, category: d.category || null, sku: null,

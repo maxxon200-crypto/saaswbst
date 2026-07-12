@@ -7,11 +7,19 @@ import { cn } from "@/lib/cn";
 import { formatDimensions, formatMoney } from "@/lib/format";
 import { deleteItem, updateItem } from "@/lib/data/actions";
 import type { ProjectBundle, ScheduleItemWithProduct } from "@/lib/data/demo";
+import {
+  ITEM_STATUS_LABEL,
+  ITEM_STATUS_ORDER,
+  lineMargin,
+  type ItemStatus,
+} from "@/lib/db.types";
 import { AddProductPanel } from "./AddProductPanel";
 import { EditableNumber } from "./EditableNumber";
 
 const SYMBOL: Record<string, string> = { EUR: "€", GBP: "£", USD: "$", CHF: "CHF " };
 const TH = "px-3 py-3 label align-bottom";
+
+type ItemPatch = Parameters<typeof updateItem>[2];
 
 export function ScheduleScreen({ bundle }: { bundle: ProjectBundle }) {
   const { project, rooms } = bundle;
@@ -34,8 +42,9 @@ export function ScheduleScreen({ bundle }: { bundle: ProjectBundle }) {
     setItems((prev) => prev.map((i) => (i.id === id ? { ...i, ...patch } : i)));
   }
 
-  async function commitField(id: string, patch: { qty?: number; unit_price?: number }) {
-    patchLocal(id, patch);
+  // Optimistic write for any editable field (qty, price, status, supplier…).
+  async function commit(id: string, patch: ItemPatch) {
+    patchLocal(id, patch as Partial<ScheduleItemWithProduct>);
     const res = await updateItem(id, project.id, patch);
     return res.ok;
   }
@@ -115,10 +124,12 @@ export function ScheduleScreen({ bundle }: { bundle: ProjectBundle }) {
                 <th className={cn(TH, "text-left")}>Brand</th>
                 <th className={cn(TH, "text-left")}>Dimensions</th>
                 <th className={cn(TH, "text-left")}>Finish</th>
+                <th className={cn(TH, "text-left")}>Supplier</th>
                 <th className={cn(TH, "text-right")}>Qty</th>
                 <th className={cn(TH, "text-right")}>Unit</th>
                 <th className={cn(TH, "text-right")}>Total</th>
-                <th className={cn(TH, "text-right")}>Status</th>
+                <th className={cn(TH, "text-right")}>Margin</th>
+                <th className={cn(TH, "text-left")}>Status</th>
               </tr>
             </thead>
             <tbody>
@@ -128,21 +139,23 @@ export function ScheduleScreen({ bundle }: { bundle: ProjectBundle }) {
                   item={it}
                   sym={sym}
                   currency={project.currency}
-                  onQty={(n) => commitField(it.id, { qty: n })}
-                  onPrice={(n) => commitField(it.id, { unit_price: n })}
+                  onQty={(n) => commit(it.id, { qty: n })}
+                  onPrice={(n) => commit(it.id, { unit_price: n })}
+                  onSupplier={(v) => commit(it.id, { supplier_name: v })}
+                  onStatus={(s) => commit(it.id, { status: s })}
                   onDelete={() => removeItem(it.id)}
                 />
               ))}
             </tbody>
             <tfoot>
               <tr className="border-t-2 border-line">
-                <td className="px-3 py-4 label" colSpan={8}>
+                <td className="px-3 py-4 label" colSpan={9}>
                   {activeRoomObj?.name} subtotal
                 </td>
                 <td className="px-3 py-4 text-right font-medium text-ink" data-numeric>
                   {formatMoney(roomTotal, project.currency)}
                 </td>
-                <td />
+                <td colSpan={2} />
               </tr>
             </tfoot>
           </table>
@@ -168,6 +181,8 @@ function Row({
   currency,
   onQty,
   onPrice,
+  onSupplier,
+  onStatus,
   onDelete,
 }: {
   item: ScheduleItemWithProduct;
@@ -175,10 +190,13 @@ function Row({
   currency: string;
   onQty: (n: number) => Promise<boolean>;
   onPrice: (n: number) => Promise<boolean>;
+  onSupplier: (v: string | null) => Promise<boolean>;
+  onStatus: (s: ItemStatus) => Promise<boolean>;
   onDelete: () => void;
 }) {
   const p = item.product;
   const total = (item.unit_price ?? 0) * item.qty;
+  const margin = lineMargin(item);
 
   return (
     <tr className="group border-b border-line align-middle transition-colors hover:bg-surface">
@@ -199,6 +217,9 @@ function Row({
         {p ? formatDimensions(p) : "—"}
       </td>
       <td className="px-3 py-3 text-stone">{p?.finish ?? "—"}</td>
+      <td className="px-3 py-3">
+        <InlineText value={item.supplier_name} placeholder="—" onCommit={onSupplier} />
+      </td>
       <td className="px-3 py-3 text-right">
         <EditableNumber value={item.qty} onCommit={onQty} min={1} />
       </td>
@@ -208,19 +229,78 @@ function Row({
       <td className="px-3 py-3 text-right font-medium text-ink" data-numeric>
         {formatMoney(total, currency)}
       </td>
+      <td className="px-3 py-3 text-right" data-numeric>
+        {margin.amount == null ? (
+          <span className="text-stone">—</span>
+        ) : (
+          <span className={cn(margin.amount < 0 ? "text-negative" : "text-ink")}>
+            {formatMoney(margin.amount, currency)}
+            {margin.pct != null && (
+              <span className="ml-1 text-[13px] text-stone">{margin.pct.toFixed(0)}%</span>
+            )}
+          </span>
+        )}
+      </td>
       <td className="px-3 py-3">
-        <div className="flex items-center justify-end gap-3">
+        <div className="flex items-center gap-2">
           <StatusDot status={item.status} />
+          <select
+            value={item.status}
+            onChange={(e) => onStatus(e.target.value as ItemStatus)}
+            aria-label="Item status"
+            className="max-w-[140px] cursor-pointer border border-line bg-paper px-2 py-1 text-[14px] text-ink transition-colors hover:border-stone focus:border-ink focus:outline-none"
+          >
+            {ITEM_STATUS_ORDER.map((s) => (
+              <option key={s} value={s}>
+                {ITEM_STATUS_LABEL[s]}
+              </option>
+            ))}
+          </select>
           <button
             type="button"
             onClick={onDelete}
             aria-label="Remove item"
-            className="text-stone opacity-0 transition-opacity hover:text-negative group-hover:opacity-100"
+            className="ml-1 text-stone opacity-0 transition-opacity hover:text-negative group-hover:opacity-100"
           >
             ×
           </button>
         </div>
       </td>
     </tr>
+  );
+}
+
+/** Minimal inline text field — commits on blur / Enter, reverts on Escape. */
+function InlineText({
+  value,
+  placeholder,
+  onCommit,
+}: {
+  value: string | null;
+  placeholder?: string;
+  onCommit: (v: string | null) => Promise<boolean>;
+}) {
+  const [draft, setDraft] = useState(value ?? "");
+
+  function commit() {
+    const next = draft.trim() === "" ? null : draft.trim();
+    if (next !== (value ?? null)) onCommit(next);
+  }
+
+  return (
+    <input
+      value={draft}
+      placeholder={placeholder}
+      onChange={(e) => setDraft(e.target.value)}
+      onBlur={commit}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") e.currentTarget.blur();
+        if (e.key === "Escape") {
+          setDraft(value ?? "");
+          e.currentTarget.blur();
+        }
+      }}
+      className="w-[120px] border-b border-transparent bg-transparent py-0.5 text-[15px] text-ink placeholder:text-stone hover:border-line focus:border-ink focus:outline-none"
+    />
   );
 }

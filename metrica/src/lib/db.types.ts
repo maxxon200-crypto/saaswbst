@@ -5,9 +5,50 @@ export type MemberRole = "owner" | "member";
 export type ProjectStatus = "active" | "archived";
 export type ProductSource = "url" | "pdf" | "manual" | "seed";
 export type PriceType = "trade" | "retail";
-export type ItemStatus = "pending" | "approved" | "rejected";
 export type ExtractionMode = "url" | "file";
 export type PlanTier = "trial" | "solo" | "studio" | "studio_plus";
+
+// The full item lifecycle, from selection to installed. (Kept named ItemStatus
+// so existing imports don't churn; 'selected' subsumes the old 'pending'.)
+export type ItemStatus =
+  | "selected"
+  | "approved"
+  | "rejected"
+  | "ordered"
+  | "in_production"
+  | "shipped"
+  | "delivered"
+  | "installed";
+
+// The only transitions the public client-approval link may make.
+export type ClientDecision = Extract<ItemStatus, "approved" | "rejected">;
+
+export const ITEM_STATUS_LABEL: Record<ItemStatus, string> = {
+  selected: "Selected",
+  approved: "Approved",
+  rejected: "Rejected",
+  ordered: "Ordered",
+  in_production: "In production",
+  shipped: "Shipped",
+  delivered: "Delivered",
+  installed: "Installed",
+};
+
+// Display order for status dropdowns / grouped boards.
+export const ITEM_STATUS_ORDER: ItemStatus[] = [
+  "selected",
+  "approved",
+  "rejected",
+  "ordered",
+  "in_production",
+  "shipped",
+  "delivered",
+  "installed",
+];
+
+export type PoStatus = "draft" | "sent" | "confirmed" | "fulfilled";
+export type ClaimStatus = "open" | "submitted" | "accepted" | "rejected" | "resolved";
+export type InvoiceStatus = "draft" | "sent" | "viewed" | "paid" | "overdue";
 
 export interface Studio {
   id: string;
@@ -91,6 +132,80 @@ export interface ScheduleItem {
   status: ItemStatus;
   client_comment: string | null;
   created_at: string;
+  // v2 operations pivot
+  supplier_name: string | null;
+  cost: number | null;
+  markup_pct: number | null;
+  client_price: number | null;
+  expected_date: string | null;
+  actual_date: string | null;
+  purchase_order_id: string | null;
+}
+
+export interface PurchaseOrder {
+  id: string;
+  studio_id: string;
+  project_id: string;
+  supplier_name: string;
+  supplier_email: string | null;
+  po_number: string;
+  status: PoStatus;
+  sent_at: string | null;
+  confirmed_at: string | null;
+  expected_ship_date: string | null;
+  total_cost: number | null;
+  currency: string;
+  pdf_path: string | null;
+  created_at: string;
+}
+
+export interface PoItem {
+  id: string;
+  purchase_order_id: string;
+  schedule_item_id: string | null;
+  qty: number;
+  unit_cost: number | null;
+  line_total: number | null;
+}
+
+export interface Claim {
+  id: string;
+  studio_id: string;
+  project_id: string;
+  schedule_item_id: string | null;
+  purchase_order_id: string | null;
+  description: string | null;
+  photo_paths: string[];
+  supplier_name: string | null;
+  status: ClaimStatus;
+  hours_spent: number;
+  resolution_notes: string | null;
+  created_at: string;
+  resolved_at: string | null;
+}
+
+export interface ClientInvoice {
+  id: string;
+  studio_id: string;
+  project_id: string;
+  stripe_invoice_id: string | null;
+  amount: number;
+  currency: string;
+  status: InvoiceStatus;
+  due_date: string | null;
+  paid_at: string | null;
+  created_at: string;
+}
+
+/** client_price − cost, in currency units and as a percentage of client_price. */
+export function lineMargin(item: Pick<ScheduleItem, "cost" | "client_price">): {
+  amount: number | null;
+  pct: number | null;
+} {
+  if (item.cost == null || item.client_price == null) return { amount: null, pct: null };
+  const amount = item.client_price - item.cost;
+  const pct = item.client_price === 0 ? null : (amount / item.client_price) * 100;
+  return { amount, pct };
 }
 
 export const PLAN_LABEL: Record<PlanTier, string> = {

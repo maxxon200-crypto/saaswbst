@@ -68,7 +68,19 @@ export async function createProject(input: {
 export async function updateItem(
   itemId: string,
   projectId: string,
-  patch: { qty?: number; unit_price?: number | null; notes?: string | null },
+  patch: {
+    qty?: number;
+    unit_price?: number | null;
+    notes?: string | null;
+    // v2 operations pivot — order tracking + budget/margin fields
+    status?: ItemStatus;
+    supplier_name?: string | null;
+    cost?: number | null;
+    markup_pct?: number | null;
+    client_price?: number | null;
+    expected_date?: string | null;
+    actual_date?: string | null;
+  },
 ): Promise<ActionResult> {
   const mode = guarded();
   if (mode !== "live") return mode === "demo" ? { ok: true } : { ok: false, error: "Not configured." };
