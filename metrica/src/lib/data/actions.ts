@@ -2,7 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { isDemoMode, isSupabaseConfigured } from "@/lib/supabase/config";
+import { getStudioContextOrNull } from "@/lib/studio";
 import type { ExtractionResult } from "@/lib/extract/schema";
 import type { ItemStatus, ProductSource } from "@/lib/db.types";
 
@@ -188,6 +190,39 @@ export async function addItemFromExtraction(input: {
 
   revalidatePath(`/projects/${input.projectId}`);
   return { ok: true, data: { id: itemRow.id } };
+}
+
+/**
+ * GDPR account deletion — genuinely removes the studio's Storage objects and
+ * every row (studios cascade deletes projects, rooms, items, products, members,
+ * extractions), then deletes the auth user. Owner only.
+ */
+export async function deleteAccount(): Promise<ActionResult> {
+  const mode = guarded();
+  if (mode !== "live") {
+    return { ok: false, error: mode === "demo" ? "Disabled in the demo." : "Not configured." };
+  }
+
+  const ctx = await getStudioContextOrNull();
+  if (!ctx) return { ok: false, error: "Not signed in." };
+  if (ctx.role !== "owner") return { ok: false, error: "Only the studio owner can delete the account." };
+
+  const admin = createSupabaseAdminClient();
+  for (const bucket of ["product-images", "source-files", "studio-logos"]) {
+    const { data: files } = await admin.storage.from(bucket).list(ctx.studioId);
+    if (files?.length) {
+      await admin.storage.from(bucket).remove(files.map((f) => `${ctx.studioId}/${f.name}`));
+    }
+  }
+  await admin.from("studios").delete().eq("id", ctx.studioId);
+
+  const supabase = createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (user) await admin.auth.admin.deleteUser(user.id);
+
+  return { ok: true };
 }
 
 /** Enable sharing for a project and return the public approval URL. */

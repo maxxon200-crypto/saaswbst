@@ -21,6 +21,35 @@ const DEMO: StudioContext = {
   isDemo: true,
 };
 
+/** Non-redirecting resolver for route handlers. Returns null when unresolved. */
+export async function getStudioContextOrNull(): Promise<StudioContext | null> {
+  if (!isSupabaseConfigured()) return isDemoMode() ? DEMO : null;
+
+  const supabase = createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+
+  const { data: membership } = await supabase
+    .from("studio_members")
+    .select("role, studio:studios(*)")
+    .eq("user_id", user.id)
+    .limit(1)
+    .maybeSingle();
+  if (!membership?.studio) return null;
+
+  const studio = membership.studio as unknown as Studio;
+  return {
+    studioId: studio.id,
+    studioName: studio.name,
+    plan: studio.plan,
+    role: (membership.role as MemberRole) ?? "member",
+    userEmail: user.email ?? null,
+    isDemo: false,
+  };
+}
+
 /**
  * Resolves the authenticated user's studio for the app shell. Redirects to
  * /login when there is no session. Falls back to demo data only in local
@@ -32,32 +61,16 @@ export async function getStudioContext(): Promise<StudioContext> {
     redirect("/login");
   }
 
+  const ctx = await getStudioContextOrNull();
+  if (ctx) return ctx;
+
+  // Signed in but no studio yet, or no session → bootstrap or send to login.
   const supabase = createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: membership } = await supabase
-    .from("studio_members")
-    .select("role, studio:studios(*)")
-    .eq("user_id", user.id)
-    .limit(1)
-    .maybeSingle();
-
-  if (!membership?.studio) {
-    // First login with no studio → bootstrap one, then reload the app.
-    await supabase.rpc("create_studio", { p_name: "My studio" });
-    redirect("/projects");
-  }
-
-  const studio = membership.studio as unknown as Studio;
-  return {
-    studioId: studio.id,
-    studioName: studio.name,
-    plan: studio.plan,
-    role: (membership.role as MemberRole) ?? "member",
-    userEmail: user.email ?? null,
-    isDemo: false,
-  };
+  await supabase.rpc("create_studio", { p_name: "My studio" });
+  redirect("/projects");
 }
