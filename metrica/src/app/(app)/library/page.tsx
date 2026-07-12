@@ -1,18 +1,27 @@
-// Milestone 1 shell placeholder. The library screen + seed data lands in
-// Milestone 5.
-export default function LibraryPage() {
+import { LibraryClient } from "@/components/library/LibraryClient";
+import { listLibrary } from "@/lib/data/library";
+import { listProjects } from "@/lib/data/projects";
+
+export const dynamic = "force-dynamic";
+
+export default async function LibraryPage() {
+  const [products, projects] = await Promise.all([listLibrary(), listProjects()]);
+
   return (
     <div>
       <header>
         <h1 className="text-page font-semibold text-ink">Library</h1>
-        <p className="mt-3 max-w-[52ch] text-body text-stone">
-          Every product your studio has extracted or added, reusable across
-          projects.
+        <p className="mt-3 max-w-[56ch] text-body text-stone">
+          Every product your studio has extracted or added, alongside a curated
+          European starter library with correct metric dimensions and IT/EN
+          descriptions.
         </p>
       </header>
-
-      <div className="mt-16 border-t border-line pt-20 text-center">
-        <p className="text-body text-stone">The product library arrives in Milestone 5.</p>
+      <div className="mt-8">
+        <LibraryClient
+          products={products}
+          projects={projects.map((p) => ({ id: p.id, name: p.name }))}
+        />
       </div>
     </div>
   );

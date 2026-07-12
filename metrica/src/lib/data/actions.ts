@@ -190,6 +190,55 @@ export async function addItemFromExtraction(input: {
   return { ok: true, data: { id: itemRow.id } };
 }
 
+/** Add an existing library product to a project's first room. */
+export async function addLibraryProductToProject(
+  productId: string,
+  projectId: string,
+): Promise<ActionResult<{ id: string }>> {
+  const mode = guarded();
+  if (mode !== "live") return mode === "demo" ? { ok: true, data: { id: "demo-item" } } : { ok: false, error: "Not configured." };
+
+  const supabase = createSupabaseServerClient();
+  const { data: room } = await supabase
+    .from("rooms")
+    .select("id, code")
+    .eq("project_id", projectId)
+    .order("position")
+    .limit(1)
+    .maybeSingle();
+  if (!room) return { ok: false, error: "Add a room to that project first." };
+
+  const { data: product } = await supabase
+    .from("products")
+    .select("price_amount")
+    .eq("id", productId)
+    .maybeSingle();
+
+  const { count } = await supabase
+    .from("schedule_items")
+    .select("*", { count: "exact", head: true })
+    .eq("room_id", room.id);
+  const ref = `${room.code}-${String((count ?? 0) + 1).padStart(2, "0")}`;
+
+  const { data, error } = await supabase
+    .from("schedule_items")
+    .insert({
+      project_id: projectId,
+      room_id: room.id,
+      product_id: productId,
+      ref_code: ref,
+      qty: 1,
+      unit_price: product?.price_amount ?? null,
+      position: count ?? 0,
+    })
+    .select("id")
+    .single();
+  if (error || !data) return { ok: false, error: error?.message ?? "Failed." };
+
+  revalidatePath(`/projects/${projectId}`);
+  return { ok: true, data: { id: data.id } };
+}
+
 export async function setItemStatus(
   itemId: string,
   projectId: string,
