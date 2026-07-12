@@ -29,7 +29,8 @@ const config: Config = {
       transparent: "transparent",
       current: "currentColor",
     },
-    // 10px on cards and buttons — soft, modern, Apple.
+    // Soft, modern, Apple: 10px on buttons (rounded-lg), 12px on cards/panels
+    // and the video frame (rounded-xl). Nothing sharp, nothing fully round.
     borderRadius: {
       none: "0px",
       sm: "6px",
