@@ -1,0 +1,121 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------ *
+ * Gesso palette — six tokens + two functional status colours. Single
+ * source of truth for colour, mirrored by reference into tailwind.config.
+ * Nothing outside this block may appear on screen.
+ * ------------------------------------------------------------------ */
+:root {
+  --paper: #f4f4f1; /* app background — cool neutral off-white */
+  --surface: #fbfbf9; /* cards, panels, table rows, form fields */
+  --ink: #1c1c1a; /* primary text — never #000 */
+  --stone: #6e6e68; /* secondary text, labels — 4.65:1 on --paper (AA) */
+  --line: #e2e2dd; /* hairline borders, dividers, table rules */
+  --accent: #7a2e2e; /* muted oxblood */
+
+  /* Functional only — status, never decoration. */
+  --positive: #3e5f4a; /* approved / extraction succeeded */
+  --negative: #8a3a2e; /* rejected / extraction failed */
+
+  /* Backdrop scrim for modals — --ink at 40%, no shadows anywhere. */
+  --scrim: rgba(28, 28, 26, 0.4);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-satoshi), sans-serif;
+    font-size: 17px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--ink);
+    color: var(--paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* Numbers are the product: tabular figures everywhere they matter. */
+  .tnum,
+  [data-numeric] {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+}
+
+@layer components {
+  /* ALL-CAPS metadata label. --stone reads at >= 4.5:1 on paper and surface. */
+  .label {
+    font-size: 13px;
+    line-height: 1.3;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--stone);
+    font-weight: 500;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Motion — content is visible by default; animation only ever starts
+ * from a visible base. prefers-reduced-motion collapses everything.
+ * ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* The two permitted app motions. Both animate FROM a visible base via a
+   keyframe that ends at the natural state, so JS-off / reduced-motion render
+   the final, readable state. */
+@keyframes panel-rise {
+  from {
+    opacity: 0.6;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes result-fade {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .motion-panel {
+    animation: panel-rise 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .motion-result {
+    animation: result-fade 0.3s ease-out both;
+  }
+}
