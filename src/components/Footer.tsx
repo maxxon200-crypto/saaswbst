@@ -1,57 +1,85 @@
 import Link from "next/link";
+import { APP_SIGN_IN } from "@/lib/links";
 import { LocaleToggle } from "./LocaleToggle";
-import type { FooterContent } from "@/content/types";
+import type { Content } from "@/content/types";
 
 /**
- * Footer — dark zone, 1px --ash top border.
- *
- * No social icons: Metrica has no public profiles yet. Add them here (and only
- * here) once real accounts exist — flagged per spec.
+ * Footer — four columns over a hairline top border. No social icons: Metrica
+ * has no public profiles yet. Add them (and only then) once real accounts exist.
  */
 export function Footer({
   content,
   homeHref,
   privacyHref,
   termsHref,
-  localeSwitch,
 }: {
-  content: FooterContent;
+  content: Content;
   homeHref: string;
   privacyHref: string;
   termsHref: string;
-  localeSwitch: string;
 }) {
+  const f = content.footer;
   return (
-    <footer className="border-t border-ash bg-void text-chalk">
-      <div className="shell py-16 md:py-24">
-        <div className="flex flex-col gap-12 md:flex-row md:items-end md:justify-between">
+    <footer className="border-t border-hairline bg-bg">
+      <div className="shell py-16">
+        <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-4">
           <div>
-            <Link href={homeHref} className="t-wordmark">
-              {content.wordmark}
+            <Link href={homeHref} className="text-[16px] font-medium text-text">
+              {f.wordmark}
             </Link>
-            <p className="t-mono mt-4 text-smoke">{content.madeIn}</p>
+            <p className="mt-3 max-w-[24ch] text-[15px] text-text-dim">{f.tagline}</p>
           </div>
 
-          <a
-            href={`mailto:${content.email}`}
-            data-cursor
-            className="link-quiet text-[clamp(24px,4vw,40px)] font-medium tracking-tighter text-chalk"
-          >
-            {content.email}
-          </a>
+          <div>
+            <p className="t-label mb-4">{f.productTitle}</p>
+            <ul className="flex flex-col gap-2.5 text-[15px] text-text-dim">
+              {content.nav.links.map((link) => (
+                <li key={link.href}>
+                  <a href={link.href} className="link-quiet">
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+              <li>
+                <a href={APP_SIGN_IN} className="link-quiet">
+                  {content.nav.signIn}
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <p className="t-label mb-4">{f.companyTitle}</p>
+            <ul className="flex flex-col gap-2.5 text-[15px] text-text-dim">
+              <li>
+                <a href={`mailto:${f.email}`} className="link-quiet">
+                  {f.contact}
+                </a>
+              </li>
+              <li>
+                <Link href={privacyHref} className="link-quiet">
+                  {f.privacy}
+                </Link>
+              </li>
+              <li>
+                <Link href={termsHref} className="link-quiet">
+                  {f.terms}
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <p className="t-label mb-4">{f.languageTitle}</p>
+            <LocaleToggle ariaLabel={content.nav.localeSwitch} />
+          </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-6 border-t border-ash pt-7 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-7">
-            <Link href={privacyHref} className="link-quiet t-mono text-smoke">
-              {content.privacy}
-            </Link>
-            <Link href={termsHref} className="link-quiet t-mono text-smoke">
-              {content.terms}
-            </Link>
-            <span className="t-mono text-smoke">{content.rights}</span>
-          </div>
-          <LocaleToggle ariaLabel={localeSwitch} className="text-chalk" />
+        <div className="mt-14 flex flex-col gap-4 border-t border-hairline pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <span className="text-[13px] text-text-mute">{f.rights}</span>
+          <a href={`mailto:${f.email}`} className="link-quiet text-[15px] text-text">
+            {f.email}
+          </a>
         </div>
       </div>
     </footer>

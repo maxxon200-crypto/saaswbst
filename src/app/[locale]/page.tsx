@@ -3,11 +3,12 @@ import { defaultLocale, isLocale, localePath, SITE_URL } from "@/lib/i18n";
 import { getContent } from "@/content";
 import { Nav } from "@/components/Nav";
 import { Hero } from "@/components/Hero";
-import { Demo } from "@/components/Demo";
-import { Problem } from "@/components/Problem";
-import { Capabilities } from "@/components/Capabilities";
+import { ProductVideo } from "@/components/ProductVideo";
+import { SocialProof } from "@/components/SocialProof";
+import { Features } from "@/components/Features";
 import { Pricing } from "@/components/Pricing";
-import { Manifesto } from "@/components/Manifesto";
+import { Faq } from "@/components/Faq";
+import { ClosingCta } from "@/components/ClosingCta";
 import { Footer } from "@/components/Footer";
 
 export default function Page({ params }: { params: { locale: string } }) {
@@ -25,11 +26,7 @@ export default function Page({ params }: { params: { locale: string } }) {
     operatingSystem: "Web",
     description: c.meta.description,
     url: SITE_URL,
-    offers: {
-      "@type": "Offer",
-      price: "39",
-      priceCurrency: "EUR",
-    },
+    offers: { "@type": "Offer", price: "39", priceCurrency: "EUR" },
   };
 
   return (
@@ -41,18 +38,18 @@ export default function Page({ params }: { params: { locale: string } }) {
       <Nav content={c.nav} homeHref={homeHref} />
       <main>
         <Hero content={c.hero} />
-        <Demo content={c.demo} />
-        <Problem content={c.problem} />
-        <Capabilities content={c.capabilities} />
+        <ProductVideo label={c.videoPlaceholder} />
+        <SocialProof content={c.socialProof} />
+        <Features content={c.features} videoLabel={c.videoPlaceholder} />
         <Pricing content={c.pricing} />
-        <Manifesto content={c.manifesto} />
+        <Faq content={c.faq} />
+        <ClosingCta content={c.closing} />
       </main>
       <Footer
-        content={c.footer}
+        content={c}
         homeHref={homeHref}
         privacyHref={privacyHref}
         termsHref={termsHref}
-        localeSwitch={c.nav.localeSwitch}
       />
     </>
   );

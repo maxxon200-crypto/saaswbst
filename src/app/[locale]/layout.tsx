@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { satoshi, mono } from "@/lib/fonts";
 import { defaultLocale, isLocale, locales, SITE_URL } from "@/lib/i18n";
 import { getContent } from "@/content";
 import SmoothScroll from "@/components/SmoothScroll";
-import { Cursor } from "@/components/Cursor";
 import "../globals.css";
 
 export function generateStaticParams() {
@@ -57,13 +55,13 @@ export default function LocaleLayout({
   const { locale } = params;
   if (!isLocale(locale)) notFound();
 
+  // data-zone scopes the marketing palette + system font stack so they can
+  // never touch the app's Gesso tokens (a separate deployment). No webfont is
+  // loaded for text — the stack resolves to SF Pro on Apple.
   return (
-    // data-zone scopes the marketing palette so it can never touch the app's
-    // Gesso tokens (a separate deployment).
-    <html lang={locale} data-zone="marketing" className={`${satoshi.variable} ${mono.variable}`}>
+    <html lang={locale} data-zone="marketing">
       <body>
         <SmoothScroll>{children}</SmoothScroll>
-        <Cursor />
       </body>
     </html>
   );

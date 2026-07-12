@@ -1,7 +1,6 @@
 /**
  * The bilingual content contract. Both en.ts and it.ts implement this exactly,
- * so every section is guaranteed to have complete copy in both locales. The IT
- * manifesto and headlines are native rewrites, not literal translations.
+ * so every section has complete copy in both locales. IT is a native rewrite.
  */
 
 export interface Meta {
@@ -12,7 +11,6 @@ export interface Meta {
 
 export interface NavContent {
   wordmark: string;
-  /** in-page anchor links */
   links: { label: string; href: string }[];
   signIn: string;
   start: string;
@@ -20,63 +18,27 @@ export interface NavContent {
 }
 
 export interface HeroContent {
-  eyebrow: string;
-  /** headline split so exactly one word carries the accent */
-  line1: string;
-  line2: string;
-  accent: string;
-  subline: string;
-  primaryCta: string;
-  secondaryCta: string;
-  corner: string;
-}
-
-export interface DemoContent {
-  label: string;
   headline: string;
-  /** schedule column labels, in display order */
-  columns: string[];
-  /** filled values, same order as columns — the type-in sequence */
-  values: string[];
+  subline: string;
+  cta: string;
+  ctaNote: string;
+}
+
+export interface SocialProofContent {
+  lead: string;
+  brands: string[];
   caption: string;
-  replay: string;
-  /** mono strings rendered on the CSS cut-sheet (product-side, universal) */
-  sheet: {
-    docType: string;
-    designer: string;
-    specs: { k: string; v: string }[];
-  };
 }
 
-export interface ProblemColumn {
-  figure: string;
-  body: string;
-}
-
-export interface ProblemContent {
-  label: string;
-  columns: ProblemColumn[];
-}
-
-export interface Capability {
-  index: string;
+export interface FeatureItem {
   title: string;
   body: string;
 }
 
-export interface CapabilitiesContent {
-  label: string;
-  reads: Capability;
-  library: Capability & { brands: string[]; brandAccentIndex: number };
-  documents: Capability;
-  /** labels used inside the spec-book mockup visual */
-  specBook: {
-    studio: string;
-    project: string;
-    item: string;
-    footer: string;
-    rows: { k: string; v: string }[];
-  };
+export interface FeaturesContent {
+  heading: string;
+  subheading: string;
+  items: FeatureItem[];
 }
 
 export interface PricingPlan {
@@ -85,29 +47,37 @@ export interface PricingPlan {
   cadence: string;
   rows: string[];
   cta: string;
-  /** the one plan flagged "MOST STUDIOS" */
   featuredLabel?: string;
 }
 
 export interface PricingContent {
-  label: string;
+  heading: string;
+  subheading: string;
   plans: PricingPlan[];
   note: string;
 }
 
-export interface ManifestoContent {
-  label: string;
-  lines: string[];
-  /** the single word wrapped in --blood (first match across lines) */
-  accent: string;
+export interface FaqContent {
+  heading: string;
+  subheading: string;
+  items: { q: string; a: string }[];
+}
+
+export interface ClosingContent {
+  heading: string;
+  cta: string;
 }
 
 export interface FooterContent {
   wordmark: string;
-  email: string;
-  madeIn: string;
+  tagline: string;
+  productTitle: string;
+  companyTitle: string;
+  languageTitle: string;
+  contact: string;
   privacy: string;
   terms: string;
+  email: string;
   rights: string;
   /** flagged: no social links until real profiles exist */
   socialNote: string;
@@ -128,13 +98,15 @@ export interface LegalDoc {
 
 export interface Content {
   meta: Meta;
+  /** placeholder label shown in a video slot until the mp4 is dropped in */
+  videoPlaceholder: string;
   nav: NavContent;
   hero: HeroContent;
-  demo: DemoContent;
-  problem: ProblemContent;
-  capabilities: CapabilitiesContent;
+  socialProof: SocialProofContent;
+  features: FeaturesContent;
   pricing: PricingContent;
-  manifesto: ManifestoContent;
+  faq: FaqContent;
+  closing: ClosingContent;
   footer: FooterContent;
   privacy: LegalDoc;
   terms: LegalDoc;

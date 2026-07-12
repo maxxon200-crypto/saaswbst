@@ -1,38 +1,42 @@
 import { cn } from "@/lib/cn";
 
-type Variant = "primary" | "ghostChalk" | "ghostInk";
+type Variant = "primary" | "outline";
+type Size = "sm" | "md";
 
 /**
- * The site's only button. Renders a plain <a> — CTAs cross into the app
- * (a full navigation), and in-page anchors are handled by Lenis. Radius 0,
- * mono caps, one 0.2s colour transition on hover. Nothing else moves.
+ * The site's button. Plain <a> — CTAs cross into the app (a full navigation)
+ * and in-page anchors are handled by Lenis. White is the accent: the primary
+ * button is a white fill with --bg text. One 0.15s hover transition.
  */
 const base =
-  "inline-flex items-center justify-center whitespace-nowrap font-mono uppercase tracking-mono text-[13px] font-medium px-7 py-[18px] leading-none transition-colors duration-200 ease-quiet";
+  "inline-flex items-center justify-center whitespace-nowrap rounded-lg font-medium leading-none transition-colors duration-150 ease-quiet";
+
+const sizes: Record<Size, string> = {
+  sm: "px-4 py-2 text-[14px]",
+  md: "px-5 py-3 text-[15px]",
+};
 
 const variants: Record<Variant, string> = {
-  // The primary CTA — one of the few permitted accent usages.
-  primary: "bg-blood text-chalk hover:bg-ink",
-  // Secondary over the dark hero: 1px chalk border, transparent fill.
-  ghostChalk: "border border-chalk text-chalk hover:bg-chalk hover:text-void",
-  // Secondary on a light surface.
-  ghostInk: "border border-ink text-ink hover:bg-ink hover:text-bone",
+  primary: "bg-text text-bg hover:bg-text-dim",
+  outline: "border border-hairline text-text hover:bg-surface-2",
 };
 
 export function Button({
   href,
   children,
   variant = "primary",
+  size = "md",
   className,
   ...rest
 }: {
   href: string;
   children: React.ReactNode;
   variant?: Variant;
+  size?: Size;
   className?: string;
 } & React.AnchorHTMLAttributes<HTMLAnchorElement>) {
   return (
-    <a href={href} className={cn(base, variants[variant], className)} {...rest}>
+    <a href={href} className={cn(base, sizes[size], variants[variant], className)} {...rest}>
       {children}
     </a>
   );

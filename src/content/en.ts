@@ -2,165 +2,147 @@ import type { Content } from "./types";
 
 export const en: Content = {
   meta: {
-    title: "Metrica — Specification, without the copy-paste",
+    title: "Metrica — Excel for FF&E schedules",
     description:
-      "Metrica reads a manufacturer's PDF cut-sheet and fills the whole FF&E spec — dimensions, materials, finish, price, lead time. Export a spec book your client keeps. Built in Milan.",
-    ogAlt: "Metrica — specification, without the copy-paste.",
+      "Drop a manufacturer PDF. Metrica reads the spec — dimensions, materials, finish, price, lead time — and fills your FF&E schedule. Export a spec book your client keeps. Built in Milan.",
+    ogAlt: "Metrica — Excel for FF&E schedules.",
   },
 
+  videoPlaceholder: "Preview coming",
+
   nav: {
-    wordmark: "METRICA",
+    wordmark: "Metrica",
     links: [
-      { label: "Work", href: "#work" },
+      { label: "Features", href: "#features" },
       { label: "Pricing", href: "#pricing" },
     ],
     signIn: "Sign in",
-    start: "Start",
+    start: "Start free",
     localeSwitch: "Change language",
   },
 
   hero: {
-    eyebrow: "FF&E Specification — Milan",
-    line1: "Specification,",
-    line2: "without the",
-    accent: "copy-paste.",
+    headline: "Excel for FF&E schedules",
     subline:
-      "Drop a manufacturer PDF. Get a complete spec. Export a book your client keeps.",
-    primaryCta: "Start free",
-    secondaryCta: "See it work",
-    corner: "EST. 2026 / MILANO",
+      "Drop a manufacturer PDF. Metrica reads the spec and fills your schedule. Export a book your client keeps.",
+    cta: "Start free",
+    ctaNote: "14-day trial. No card.",
   },
 
-  demo: {
-    label: "The Mechanism",
-    headline: "One PDF in. A full spec out.",
-    columns: ["Brand", "Product", "Dimensions", "Finish", "Lead time", "Price"],
-    values: [
-      "FLOS",
-      "IC LIGHTS T1",
-      "Ø 300 × H 535 MM",
-      "BRUSHED BRASS",
-      "6–8 WEEKS",
-      "€ 890,00",
-    ],
-    caption: "PDF cut-sheet → complete specification. 4 seconds.",
-    replay: "Replay",
-    sheet: {
-      docType: "Technical data sheet",
-      designer: "Design — Michael Anastassiades",
-      specs: [
-        { k: "MODEL", v: "IC LIGHTS T1" },
-        { k: "TYPE", v: "TABLE LAMP" },
-        { k: "Ø", v: "300 MM" },
-        { k: "HEIGHT", v: "535 MM" },
-        { k: "MATERIAL", v: "BRASS, BLOWN GLASS" },
-        { k: "FINISH", v: "BRUSHED BRASS" },
-        { k: "SOURCE", v: "1 × G9 LED" },
-        { k: "IP", v: "IP20" },
-      ],
-    },
+  socialProof: {
+    lead: "Built in Milan for European studios",
+    brands: ["B&B ITALIA", "CASSINA", "FLOS", "ARTEMIDE", "MOLTENI", "BOFFI"],
+    caption: "Pre-loaded in the library",
   },
 
-  problem: {
-    label: "The Problem",
-    columns: [
+  features: {
+    heading: "Everything from the PDF to the client.",
+    subheading: "Three steps. No spreadsheet.",
+    items: [
       {
-        figure: "3 Days",
-        body: "The average FF&E schedule takes three days of copy-paste. You bill design hours. You spend them typing.",
+        title: "Reads what other tools can't.",
+        body: "European manufacturers publish their specs as PDF cut-sheets. Every competing tool scrapes web pages and chokes on them. Metrica reads the PDF — the dimension line, the finish code, the price — and pulls the values clean.",
       },
       {
-        figure: "40 Items",
-        body: "Forty products. Forty PDFs. Forty rounds of transcription, each one a chance to get a dimension wrong.",
+        title: "A library that already speaks Italian.",
+        body: "B&B Italia, Cassina, Flos, Artemide, Molteni, Boffi. Correct millimetres, EUR trade pricing, IT/EN descriptions — pre-loaded, so your schedule starts half-built.",
       },
       {
-        figure: "1 Spreadsheet",
-        body: "And at the end, a document that undersells the work inside it.",
+        title: "Documents they keep.",
+        body: "Spec books typeset like publications, exported under your studio's name. One link, and your client approves item by item. No PDF ping-pong.",
       },
     ],
-  },
-
-  capabilities: {
-    label: "What it does",
-    reads: {
-      index: "01",
-      title: "Reads what others can't.",
-      body: "European brands publish specs as PDF cut-sheets. Every competing tool scrapes web pages and chokes on them. Metrica reads the PDF — the dimension line, the finish code, the price — and pulls the value out clean.",
-    },
-    library: {
-      index: "02",
-      title: "A library that speaks Italian.",
-      body: "B&B Italia. Cassina. Flos. Artemide. Molteni. Boffi. Correct millimetres, EUR trade pricing, IT/EN descriptions, pre-loaded — so the schedule starts half-built.",
-      brands: ["B&B ITALIA", "CASSINA", "FLOS", "ARTEMIDE", "MOLTENI", "BOFFI"],
-      brandAccentIndex: 2,
-    },
-    documents: {
-      index: "03",
-      title: "Documents they keep.",
-      body: "Spec books typeset like publications, exported under your studio's name. One link, and your client approves item by item — no PDF ping-pong, no lost versions.",
-    },
-    specBook: {
-      studio: "STUDIO MERIDIANA",
-      project: "PROJECT — VILLA COMO / LIVING",
-      item: "IC LIGHTS T1",
-      footer: "SPEC BOOK — 01 / 24",
-      rows: [
-        { k: "BRAND", v: "FLOS" },
-        { k: "DIMENSIONS", v: "Ø 300 × H 535 MM" },
-        { k: "FINISH", v: "BRUSHED BRASS" },
-        { k: "LEAD TIME", v: "6–8 WEEKS" },
-      ],
-    },
   },
 
   pricing: {
-    label: "Pricing",
+    heading: "Simple pricing.",
+    subheading: "Start free. Upgrade when the schedules get long.",
     plans: [
       {
         name: "Solo",
         price: "€39",
-        cadence: "/ MO",
-        rows: ["1 seat", "150 extractions", "Full library"],
+        cadence: "/month",
+        rows: ["1 seat", "150 extractions/month", "Unlimited projects"],
         cta: "Start free",
       },
       {
         name: "Studio",
         price: "€79",
-        cadence: "/ MO",
-        rows: ["Up to 5 seats", "600 extractions", "Studio branding"],
+        cadence: "/month",
+        rows: [
+          "Up to 5 seats",
+          "600 extractions/month",
+          "Unlimited projects",
+          "Studio branding",
+        ],
         cta: "Start free",
-        featuredLabel: "Most studios",
+        featuredLabel: "POPULAR",
       },
       {
         name: "Studio+",
         price: "€149",
-        cadence: "/ MO",
-        rows: ["Unlimited seats", "2,000 extractions", "Priority support"],
-        cta: "Start",
+        cadence: "/month",
+        rows: [
+          "Unlimited seats",
+          "2,000 extractions/month",
+          "Unlimited projects",
+          "Studio branding",
+          "Priority support",
+        ],
+        cta: "Start free",
       },
     ],
-    note: "14-day trial. No card. No per-seat games.",
+    note: "14-day trial. No card required. Cancel anytime.",
   },
 
-  manifesto: {
-    label: "Manifesto",
-    lines: [
-      "Specification is design work.",
-      "It should not feel like data entry.",
-      "We built the tool we wanted",
-      "in the city that makes the furniture.",
-      "Metrica. Milano.",
+  faq: {
+    heading: "FAQs",
+    subheading: "Everything you need to know about Metrica.",
+    items: [
+      {
+        q: "What is Metrica?",
+        a: "A specification tool for interior design and architecture studios. It reads manufacturer PDFs and product pages, fills your FF&E schedule, and exports a spec book.",
+      },
+      {
+        q: "What can it read?",
+        a: "PDF cut-sheets, technical drawings, product photos, and product URLs. PDFs are the point — most European brands publish specs that way and other tools can't read them.",
+      },
+      {
+        q: "Which brands are in the library?",
+        a: "B&B Italia, Cassina, Flos, Artemide, Molteni, Boffi and others, with correct metric dimensions and EUR trade pricing. You can add any product on top.",
+      },
+      {
+        q: "Do my clients need an account?",
+        a: "No. You send a link. They approve or reject each item and leave comments. Nothing to install, nothing to sign up for.",
+      },
+      {
+        q: "Where is my data stored?",
+        a: "On EU servers. Metrica is GDPR-compliant. You can export or delete everything at any time.",
+      },
+      {
+        q: "Can I cancel anytime?",
+        a: "Yes. Cancel from settings, no call, no email. Your projects stay exportable.",
+      },
     ],
-    accent: "Milano",
+  },
+
+  closing: {
+    heading: "Spec the next project in an afternoon.",
+    cta: "Start free",
   },
 
   footer: {
-    wordmark: "METRICA",
-    email: "hello@metrica.studio",
-    madeIn: "Made in Milan",
+    wordmark: "Metrica",
+    tagline: "FF&E specification. Made in Milan.",
+    productTitle: "Product",
+    companyTitle: "Company",
+    languageTitle: "Language",
+    contact: "Contact",
     privacy: "Privacy",
     terms: "Terms",
+    email: "hello@metrica.studio",
     rights: "© 2026 Metrica",
-    // No social icons — Metrica has no public profiles yet. Add links here only
+    // No social icons — Metrica has no public profiles yet. Add them here only
     // once real accounts exist.
     socialNote: "",
   },
@@ -178,9 +160,9 @@ export const en: Content = {
         ],
       },
       {
-        heading: "How extractions are handled",
+        heading: "Where your data lives",
         body: [
-          "Uploaded PDFs are processed to read their specification data and are retained only as long as your project needs them. You can delete a project, and its documents, at any time.",
+          "Your projects are stored on EU servers and Metrica is GDPR-compliant. Uploaded PDFs are retained only as long as your project needs them; you can export or delete everything at any time.",
         ],
       },
       {

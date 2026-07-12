@@ -5,25 +5,27 @@ import { defaultLocale, isLocale, type Locale } from "@/lib/i18n";
 import { getContent } from "@/content";
 
 export const runtime = "nodejs";
-export const alt = "Metrica — specification, without the copy-paste.";
+export const alt = "Metrica — Excel for FF&E schedules.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-// A static poster: --void ground, the wordmark, the tagline with one red word.
-// Rendered with JetBrains Mono (satori needs woff, not woff2).
+/**
+ * OG poster: charcoal ground, the wordmark, the headline — nothing else. No
+ * accent colour, no giant type.
+ *
+ * NOTE: satori (next/og) must rasterize with an embedded font — it cannot use
+ * the system stack. Switzer-400.woff is used ONLY here, server-side, to bake
+ * this image; it is never served to a browser as a webfont. The site itself
+ * loads no webfont for text.
+ */
 export default async function OpengraphImage({ params }: { params: { locale: string } }) {
   const locale: Locale = isLocale(params.locale) ? params.locale : defaultLocale;
   const c = getContent(locale);
+  const font = await readFile(join(process.cwd(), "src/app/_og/Switzer-400.woff"));
 
-  const [mono700, mono800] = await Promise.all([
-    readFile(join(process.cwd(), "src/app/_og/JetBrainsMono-700.woff")),
-    readFile(join(process.cwd(), "src/app/_og/JetBrainsMono-800.woff")),
-  ]);
-
-  const VOID = "#0C0C0C";
-  const CHALK = "#F2F0ED";
-  const SMOKE = "#8A8A8A";
-  const BLOOD = "#C1121F";
+  const BG = "#0A0A0A";
+  const TEXT = "#F5F5F5";
+  const DIM = "#9A9A9A";
 
   return new ImageResponse(
     (
@@ -33,49 +35,30 @@ export default async function OpengraphImage({ params }: { params: { locale: str
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
-          background: VOID,
-          padding: "72px 80px",
-          fontFamily: "mono",
+          justifyContent: "center",
+          gap: 28,
+          background: BG,
+          padding: "80px",
+          fontFamily: "Switzer",
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between", color: SMOKE, fontSize: 24, letterSpacing: 4 }}>
-          <span>{c.hero.eyebrow.toUpperCase()}</span>
-          <span>EST. 2026</span>
+        <div style={{ display: "flex", fontSize: 30, color: DIM, letterSpacing: "0.01em" }}>
+          Metrica
         </div>
-
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", color: CHALK, fontSize: 130, fontWeight: 800, letterSpacing: 8 }}>
-            METRICA
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              marginTop: 24,
-              color: CHALK,
-              fontSize: 40,
-              fontWeight: 700,
-              letterSpacing: 1,
-            }}
-          >
-            <span>{`${c.hero.line1} ${c.hero.line2}`.toUpperCase()}</span>
-            <span style={{ color: BLOOD, marginLeft: 14 }}>{c.hero.accent.toUpperCase()}</span>
-          </div>
-        </div>
-
-        <div style={{ display: "flex", justifyContent: "space-between", color: SMOKE, fontSize: 24, letterSpacing: 4 }}>
-          <span>MILANO</span>
-          <span>METRICA.STUDIO</span>
+        <div
+          style={{
+            display: "flex",
+            fontSize: 64,
+            color: TEXT,
+            letterSpacing: "-0.03em",
+            maxWidth: 920,
+            lineHeight: 1.05,
+          }}
+        >
+          {c.hero.headline}
         </div>
       </div>
     ),
-    {
-      ...size,
-      fonts: [
-        { name: "mono", data: mono700, weight: 700, style: "normal" },
-        { name: "mono", data: mono800, weight: 800, style: "normal" },
-      ],
-    },
+    { ...size, fonts: [{ name: "Switzer", data: font, weight: 400, style: "normal" }] },
   );
 }

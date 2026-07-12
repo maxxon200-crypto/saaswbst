@@ -2,163 +2,145 @@ import type { Content } from "./types";
 
 export const it: Content = {
   meta: {
-    title: "Metrica — La specifica, senza il copia-incolla",
+    title: "Metrica — Excel per i capitolati FF&E",
     description:
-      "Metrica legge la scheda tecnica PDF del produttore e compila l'intera specifica FF&E — dimensioni, materiali, finitura, prezzo, consegna. Esporta un book che il cliente conserva. Fatto a Milano.",
-    ogAlt: "Metrica — la specifica, senza il copia-incolla.",
+      "Carica un PDF del produttore. Metrica legge la scheda — dimensioni, materiali, finitura, prezzo, consegna — e compila il tuo capitolato FF&E. Esporta un book che il cliente conserva. Fatto a Milano.",
+    ogAlt: "Metrica — Excel per i capitolati FF&E.",
   },
 
+  videoPlaceholder: "Anteprima in arrivo",
+
   nav: {
-    wordmark: "METRICA",
+    wordmark: "Metrica",
     links: [
-      { label: "Come funziona", href: "#work" },
+      { label: "Funzionalità", href: "#features" },
       { label: "Prezzi", href: "#pricing" },
     ],
     signIn: "Accedi",
-    start: "Inizia",
+    start: "Inizia gratis",
     localeSwitch: "Cambia lingua",
   },
 
   hero: {
-    eyebrow: "Specifiche FF&E — Milano",
-    line1: "Specifiche,",
-    line2: "senza il",
-    accent: "copia-incolla.",
+    headline: "Excel per i capitolati FF&E",
     subline:
-      "Carica un PDF del produttore. Ottieni una specifica completa. Esporta un book che il cliente conserva.",
-    primaryCta: "Inizia gratis",
-    secondaryCta: "Guarda come funziona",
-    corner: "EST. 2026 / MILANO",
+      "Carica un PDF del produttore. Metrica legge la scheda e compila il capitolato. Esporta un book che il cliente conserva.",
+    cta: "Inizia gratis",
+    ctaNote: "Prova di 14 giorni. Senza carta.",
   },
 
-  demo: {
-    label: "Il Meccanismo",
-    headline: "Un PDF dentro. Una specifica completa fuori.",
-    columns: ["Marca", "Prodotto", "Dimensioni", "Finitura", "Consegna", "Prezzo"],
-    values: [
-      "FLOS",
-      "IC LIGHTS T1",
-      "Ø 300 × H 535 MM",
-      "OTTONE SPAZZOLATO",
-      "6–8 SETTIMANE",
-      "€ 890,00",
-    ],
-    caption: "Scheda tecnica PDF → specifica completa. 4 secondi.",
-    replay: "Rivedi",
-    sheet: {
-      docType: "Scheda tecnica",
-      designer: "Design — Michael Anastassiades",
-      specs: [
-        { k: "MODELLO", v: "IC LIGHTS T1" },
-        { k: "TIPO", v: "LAMPADA DA TAVOLO" },
-        { k: "Ø", v: "300 MM" },
-        { k: "ALTEZZA", v: "535 MM" },
-        { k: "MATERIALE", v: "OTTONE, VETRO SOFFIATO" },
-        { k: "FINITURA", v: "OTTONE SPAZZOLATO" },
-        { k: "SORGENTE", v: "1 × G9 LED" },
-        { k: "IP", v: "IP20" },
-      ],
-    },
+  socialProof: {
+    lead: "Fatto a Milano per gli studi europei",
+    brands: ["B&B ITALIA", "CASSINA", "FLOS", "ARTEMIDE", "MOLTENI", "BOFFI"],
+    caption: "Già caricati nella libreria",
   },
 
-  problem: {
-    label: "Il Problema",
-    columns: [
+  features: {
+    heading: "Dal PDF al cliente, tutto qui.",
+    subheading: "Tre passaggi. Niente foglio Excel.",
+    items: [
       {
-        figure: "3 Giorni",
-        body: "In media un capitolato FF&E richiede tre giorni di copia-incolla. Fatturi ore di progetto. Le spendi a digitare.",
+        title: "Legge ciò che gli altri non leggono.",
+        body: "I produttori europei pubblicano le specifiche come schede PDF. Ogni strumento concorrente analizza le pagine web e si blocca. Metrica legge il PDF — la quota, il codice finitura, il prezzo — ed estrae i valori puliti.",
       },
       {
-        figure: "40 Voci",
-        body: "Quaranta prodotti. Quaranta PDF. Quaranta trascrizioni, ognuna un'occasione per sbagliare una quota.",
+        title: "Una libreria che parla già italiano.",
+        body: "B&B Italia, Cassina, Flos, Artemide, Molteni, Boffi. Millimetri corretti, prezzi trade in euro, descrizioni IT/EN — già caricati, così il capitolato parte già a metà.",
       },
       {
-        figure: "1 Foglio",
-        body: "E alla fine, un documento che svaluta il lavoro che contiene.",
+        title: "Documenti che conservano.",
+        body: "Book di specifiche impaginati come pubblicazioni, esportati con il nome del tuo studio. Un link, e il cliente approva voce per voce. Niente PDF avanti e indietro.",
       },
     ],
-  },
-
-  capabilities: {
-    label: "Cosa fa",
-    reads: {
-      index: "01",
-      title: "Legge ciò che gli altri non leggono.",
-      body: "I marchi europei pubblicano le specifiche come schede PDF. Ogni strumento concorrente analizza pagine web e si blocca. Metrica legge il PDF — la quota, il codice finitura, il prezzo — ed estrae il valore pulito.",
-    },
-    library: {
-      index: "02",
-      title: "Una libreria che parla italiano.",
-      body: "B&B Italia. Cassina. Flos. Artemide. Molteni. Boffi. Millimetri corretti, prezzi trade in euro, descrizioni IT/EN, già caricati — così il capitolato parte già a metà.",
-      brands: ["B&B ITALIA", "CASSINA", "FLOS", "ARTEMIDE", "MOLTENI", "BOFFI"],
-      brandAccentIndex: 2,
-    },
-    documents: {
-      index: "03",
-      title: "Documenti che conservano.",
-      body: "Book di specifiche impaginati come pubblicazioni, esportati con il nome del tuo studio. Un link, e il cliente approva voce per voce — niente PDF avanti e indietro, nessuna versione persa.",
-    },
-    specBook: {
-      studio: "STUDIO MERIDIANA",
-      project: "PROGETTO — VILLA COMO / LIVING",
-      item: "IC LIGHTS T1",
-      footer: "SPEC BOOK — 01 / 24",
-      rows: [
-        { k: "MARCA", v: "FLOS" },
-        { k: "DIMENSIONI", v: "Ø 300 × H 535 MM" },
-        { k: "FINITURA", v: "OTTONE SPAZZOLATO" },
-        { k: "CONSEGNA", v: "6–8 SETTIMANE" },
-      ],
-    },
   },
 
   pricing: {
-    label: "Prezzi",
+    heading: "Prezzi semplici.",
+    subheading: "Inizia gratis. Passa a un piano quando i capitolati si allungano.",
     plans: [
       {
         name: "Solo",
         price: "€39",
-        cadence: "/ MESE",
-        rows: ["1 postazione", "150 estrazioni", "Libreria completa"],
+        cadence: "/mese",
+        rows: ["1 postazione", "150 estrazioni/mese", "Progetti illimitati"],
         cta: "Inizia gratis",
       },
       {
         name: "Studio",
         price: "€79",
-        cadence: "/ MESE",
-        rows: ["Fino a 5 postazioni", "600 estrazioni", "Branding dello studio"],
+        cadence: "/mese",
+        rows: [
+          "Fino a 5 postazioni",
+          "600 estrazioni/mese",
+          "Progetti illimitati",
+          "Branding dello studio",
+        ],
         cta: "Inizia gratis",
-        featuredLabel: "La scelta degli studi",
+        featuredLabel: "POPOLARE",
       },
       {
         name: "Studio+",
         price: "€149",
-        cadence: "/ MESE",
-        rows: ["Postazioni illimitate", "2.000 estrazioni", "Supporto prioritario"],
-        cta: "Inizia",
+        cadence: "/mese",
+        rows: [
+          "Postazioni illimitate",
+          "2.000 estrazioni/mese",
+          "Progetti illimitati",
+          "Branding dello studio",
+          "Supporto prioritario",
+        ],
+        cta: "Inizia gratis",
       },
     ],
-    note: "Prova di 14 giorni. Senza carta. Nessun gioco sul numero di postazioni.",
+    note: "Prova di 14 giorni. Senza carta. Disdici quando vuoi.",
   },
 
-  manifesto: {
-    label: "Manifesto",
-    lines: [
-      "Specificare è progettare.",
-      "Non dovrebbe sembrare immissione dati.",
-      "Abbiamo creato lo strumento che ci mancava",
-      "nella città che disegna gli arredi.",
-      "Metrica. Milano.",
+  faq: {
+    heading: "Domande frequenti",
+    subheading: "Tutto quello che c'è da sapere su Metrica.",
+    items: [
+      {
+        q: "Cos'è Metrica?",
+        a: "Uno strumento di specifica per studi di interior design e architettura. Legge i PDF dei produttori e le pagine prodotto, compila il tuo capitolato FF&E ed esporta un book.",
+      },
+      {
+        q: "Cosa riesce a leggere?",
+        a: "Schede tecniche PDF, disegni tecnici, foto di prodotto e URL. I PDF sono il punto: la maggior parte dei marchi europei pubblica le specifiche così e gli altri strumenti non le leggono.",
+      },
+      {
+        q: "Quali marchi ci sono nella libreria?",
+        a: "B&B Italia, Cassina, Flos, Artemide, Molteni, Boffi e altri, con dimensioni metriche corrette e prezzi trade in euro. Puoi aggiungere qualsiasi prodotto.",
+      },
+      {
+        q: "I miei clienti devono registrarsi?",
+        a: "No. Invii un link. Approvano o rifiutano ogni voce e lasciano commenti. Niente da installare, niente registrazione.",
+      },
+      {
+        q: "Dove sono conservati i miei dati?",
+        a: "Su server europei. Metrica è conforme al GDPR. Puoi esportare o eliminare tutto in qualsiasi momento.",
+      },
+      {
+        q: "Posso disdire quando voglio?",
+        a: "Sì. Disdici dalle impostazioni, senza telefonate né email. I tuoi progetti restano esportabili.",
+      },
     ],
-    accent: "Milano",
+  },
+
+  closing: {
+    heading: "Prepara il prossimo capitolato in un pomeriggio.",
+    cta: "Inizia gratis",
   },
 
   footer: {
-    wordmark: "METRICA",
-    email: "hello@metrica.studio",
-    madeIn: "Fatto a Milano",
+    wordmark: "Metrica",
+    tagline: "Specifiche FF&E. Fatto a Milano.",
+    productTitle: "Prodotto",
+    companyTitle: "Azienda",
+    languageTitle: "Lingua",
+    contact: "Contatti",
     privacy: "Privacy",
     terms: "Termini",
+    email: "hello@metrica.studio",
     rights: "© 2026 Metrica",
     socialNote: "",
   },
@@ -176,9 +158,9 @@ export const it: Content = {
         ],
       },
       {
-        heading: "Come gestiamo le estrazioni",
+        heading: "Dove vivono i tuoi dati",
         body: [
-          "I PDF caricati vengono elaborati per leggerne i dati di specifica e sono conservati solo finché il progetto ne ha bisogno. Puoi eliminare un progetto, e i suoi documenti, in qualsiasi momento.",
+          "I tuoi progetti sono conservati su server europei e Metrica è conforme al GDPR. I PDF caricati sono conservati solo finché il progetto ne ha bisogno; puoi esportare o eliminare tutto in qualsiasi momento.",
         ],
       },
       {

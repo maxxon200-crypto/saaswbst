@@ -4,25 +4,20 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/cn";
 import { APP_SIGN_IN, APP_START } from "@/lib/links";
-import { LocaleToggle } from "./LocaleToggle";
+import { Button } from "./Button";
 import type { NavContent } from "@/content/types";
 
 /**
- * Fixed, minimal nav. Transparent with chalk text over the hero; once scrolled
- * past the hero (~100vh) it becomes solid --void with a 1px --ash bottom
- * border. This is a class toggle driven by a passive scroll listener — never a
- * scroll-linked animation.
- *
- * JS-off: the <noscript> style forces the solid state so the bar stays legible.
- * The anchor links + Sign in collapse below md; the wordmark, Start and the
- * language toggle always remain.
+ * Sticky nav. Transparent at the top; past 60px it gets a blurred, bordered
+ * background via the .nav-scrolled class (the site's only backdrop-filter,
+ * with a solid fallback). A passive scroll listener toggles the class — never a
+ * scroll-linked animation. The nav element itself never animates.
  */
 export function Nav({ content, homeHref }: { content: NavContent; homeHref: string }) {
-  const [solid, setSolid] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    // Toggle just before the full-viewport hero leaves the screen.
-    const onScroll = () => setSolid(window.scrollY > window.innerHeight * 0.85);
+    const onScroll = () => setScrolled(window.scrollY > 60);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -31,43 +26,34 @@ export function Nav({ content, homeHref }: { content: NavContent; homeHref: stri
   return (
     <header
       className={cn(
-        "site-nav fixed inset-x-0 top-0 z-50 border-b text-chalk transition-colors duration-300 ease-quiet",
-        solid ? "border-ash bg-void" : "border-transparent bg-transparent",
+        "fixed inset-x-0 top-0 z-50 transition-colors duration-200",
+        scrolled ? "nav-scrolled" : "border-b border-transparent",
       )}
     >
-      <noscript>
-        <style>{`.site-nav{background:var(--void)!important;border-color:var(--ash)!important}`}</style>
-      </noscript>
-
-      <div className="shell flex h-16 items-center justify-between md:h-[72px]">
-        <Link href={homeHref} className="t-wordmark" aria-label={content.wordmark}>
+      <div className="shell flex h-14 items-center justify-between md:h-16">
+        <Link href={homeHref} className="text-[16px] font-medium text-text">
           {content.wordmark}
         </Link>
 
-        <nav className="flex items-center gap-6 md:gap-9">
-          <ul className="hidden items-center gap-9 md:flex">
+        <nav className="flex items-center gap-5 md:gap-7">
+          <ul className="hidden items-center gap-5 md:flex md:gap-7">
             {content.links.map((link) => (
               <li key={link.href}>
-                <a href={link.href} className="link-quiet t-mono">
+                <a href={link.href} className="link-quiet text-[14px] text-text-dim">
                   {link.label}
                 </a>
               </li>
             ))}
             <li>
-              <a href={APP_SIGN_IN} className="link-quiet t-mono">
+              <a href={APP_SIGN_IN} className="link-quiet text-[14px] text-text-dim">
                 {content.signIn}
               </a>
             </li>
           </ul>
 
-          <LocaleToggle ariaLabel={content.localeSwitch} className="text-chalk" />
-
-          <a
-            href={APP_START}
-            className="bg-blood px-5 py-[10px] font-mono text-[13px] font-medium uppercase tracking-mono leading-none text-chalk transition-colors duration-200 ease-quiet hover:bg-chalk hover:text-void"
-          >
+          <Button href={APP_START} size="sm">
             {content.start}
-          </a>
+          </Button>
         </nav>
       </div>
     </header>
