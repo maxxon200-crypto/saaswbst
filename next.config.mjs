@@ -3,11 +3,9 @@ const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   images: {
+    // Every visual on the site is HTML/CSS/SVG — no raster photography, no
+    // stock, no remote hosts. AVIF/WebP kept for any future first-party asset.
     formats: ["image/avif", "image/webp"],
-    // Hero photography swap path: drop a licensed Unsplash interior/flat-lay in
-    // /public/images/hero.jpg, OR point Hero's <Image> at a remote Unsplash URL.
-    // remotePatterns is pre-authorised so the second option needs no further config.
-    remotePatterns: [{ protocol: "https", hostname: "images.unsplash.com" }],
   },
 };
 

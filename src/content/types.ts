@@ -1,43 +1,82 @@
 /**
  * The bilingual content contract. Both en.ts and it.ts implement this exactly,
- * so every section is guaranteed to have complete copy in both locales.
+ * so every section is guaranteed to have complete copy in both locales. The IT
+ * manifesto and headlines are native rewrites, not literal translations.
  */
+
+export interface Meta {
+  title: string;
+  description: string;
+  ogAlt: string;
+}
 
 export interface NavContent {
   wordmark: string;
+  /** in-page anchor links */
   links: { label: string; href: string }[];
-  /** aria-label for the locale toggle */
+  signIn: string;
+  start: string;
   localeSwitch: string;
 }
 
 export interface HeroContent {
-  /** headline is split so exactly one word carries the accent */
-  headlinePre: string;
-  headlineAccent: string;
-  headlinePost: string;
+  eyebrow: string;
+  /** headline split so exactly one word carries the accent */
+  line1: string;
+  line2: string;
+  accent: string;
   subline: string;
   primaryCta: string;
   secondaryCta: string;
+  corner: string;
+}
+
+export interface DemoContent {
+  label: string;
+  headline: string;
+  /** schedule column labels, in display order */
+  columns: string[];
+  /** filled values, same order as columns — the type-in sequence */
+  values: string[];
+  caption: string;
+  replay: string;
+  /** mono strings rendered on the CSS cut-sheet (product-side, universal) */
+  sheet: {
+    docType: string;
+    designer: string;
+    specs: { k: string; v: string }[];
+  };
+}
+
+export interface ProblemColumn {
+  figure: string;
+  body: string;
 }
 
 export interface ProblemContent {
   label: string;
-  title: string;
-  columns: { title: string; body: string }[];
+  columns: ProblemColumn[];
 }
 
-export interface HowStep {
+export interface Capability {
+  index: string;
   title: string;
   body: string;
-  /** present only on the single step that mentions extraction */
-  aiNote?: string;
-  /** which in-page mockup renders alongside this step */
-  visual: "schedule" | "product" | "specsheet";
 }
 
-export interface HowContent {
+export interface CapabilitiesContent {
   label: string;
-  steps: HowStep[];
+  reads: Capability;
+  library: Capability & { brands: string[]; brandAccentIndex: number };
+  documents: Capability;
+  /** labels used inside the spec-book mockup visual */
+  specBook: {
+    studio: string;
+    project: string;
+    item: string;
+    footer: string;
+    rows: { k: string; v: string }[];
+  };
 }
 
 export interface PricingPlan {
@@ -45,83 +84,58 @@ export interface PricingPlan {
   price: string;
   cadence: string;
   rows: string[];
-  /** the one plan flagged "For most studios" */
+  cta: string;
+  /** the one plan flagged "MOST STUDIOS" */
   featuredLabel?: string;
 }
 
 export interface PricingContent {
   label: string;
-  title: string;
   plans: PricingPlan[];
   note: string;
-  cta: string;
 }
 
 export interface ManifestoContent {
   label: string;
   lines: string[];
-}
-
-export interface WaitlistContent {
-  label: string;
-  title: string;
-  lede: string;
-  fields: {
-    email: string;
-    studioName: string;
-    country: string;
-    role: string;
-  };
-  optional: string;
-  countryPlaceholder: string;
-  rolePlaceholder: string;
-  countryGroups: { label: string; options: string[] }[];
-  roles: string[];
-  submit: string;
-  submitting: string;
-  success: string;
-  errors: {
-    email: string;
-    generic: string;
-  };
+  /** the single word wrapped in --blood (first match across lines) */
+  accent: string;
 }
 
 export interface FooterContent {
-  madeIn: string;
+  wordmark: string;
   email: string;
+  madeIn: string;
   privacy: string;
-  /** flagged: no social links until real profiles exist */
+  terms: string;
   rights: string;
+  /** flagged: no social links until real profiles exist */
+  socialNote: string;
 }
 
-export interface PrivacySection {
+export interface LegalSection {
   heading: string;
   body: string[];
 }
 
-export interface PrivacyContent {
+export interface LegalDoc {
   label: string;
   title: string;
   updated: string;
-  reviewNote: string;
-  sections: PrivacySection[];
+  sections: LegalSection[];
   backHome: string;
-}
-
-export interface Meta {
-  title: string;
-  description: string;
 }
 
 export interface Content {
   meta: Meta;
   nav: NavContent;
   hero: HeroContent;
+  demo: DemoContent;
   problem: ProblemContent;
-  how: HowContent;
+  capabilities: CapabilitiesContent;
   pricing: PricingContent;
   manifesto: ManifestoContent;
-  waitlist: WaitlistContent;
   footer: FooterContent;
-  privacy: PrivacyContent;
+  privacy: LegalDoc;
+  terms: LegalDoc;
 }

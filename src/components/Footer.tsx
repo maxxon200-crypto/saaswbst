@@ -3,50 +3,55 @@ import { LocaleToggle } from "./LocaleToggle";
 import type { FooterContent } from "@/content/types";
 
 /**
- * Footer. No social icons — Capitolo has no public profiles yet; add them here
- * only once real accounts exist (flagged per spec).
+ * Footer — dark zone, 1px --ash top border.
+ *
+ * No social icons: Metrica has no public profiles yet. Add them here (and only
+ * here) once real accounts exist — flagged per spec.
  */
 export function Footer({
   content,
   homeHref,
   privacyHref,
+  termsHref,
   localeSwitch,
 }: {
   content: FooterContent;
   homeHref: string;
   privacyHref: string;
+  termsHref: string;
   localeSwitch: string;
 }) {
   return (
-    <footer className="border-t border-line bg-paper">
-      <div className="shell py-16 md:py-20">
-        <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
+    <footer className="border-t border-ash bg-void text-chalk">
+      <div className="shell py-16 md:py-24">
+        <div className="flex flex-col gap-12 md:flex-row md:items-end md:justify-between">
           <div>
-            <Link
-              href={homeHref}
-              className="text-[15px] font-bold uppercase tracking-[0.22em] text-ink"
-            >
-              Capitolo
+            <Link href={homeHref} className="t-wordmark">
+              {content.wordmark}
             </Link>
-            <p className="label mt-3">{content.madeIn}</p>
+            <p className="t-mono mt-4 text-smoke">{content.madeIn}</p>
           </div>
 
           <a
             href={`mailto:${content.email}`}
-            className="link-quiet text-[clamp(20px,3vw,28px)] font-medium tracking-display text-ink"
+            data-cursor
+            className="link-quiet text-[clamp(24px,4vw,40px)] font-medium tracking-tighter text-chalk"
           >
             {content.email}
           </a>
         </div>
 
-        <div className="mt-12 flex flex-col gap-5 border-t border-line pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-6">
-            <Link href={privacyHref} className="link-quiet text-[15px] text-ink">
+        <div className="mt-14 flex flex-col gap-6 border-t border-ash pt-7 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-7">
+            <Link href={privacyHref} className="link-quiet t-mono text-smoke">
               {content.privacy}
             </Link>
-            <span className="label">© 2026 {content.rights}</span>
+            <Link href={termsHref} className="link-quiet t-mono text-smoke">
+              {content.terms}
+            </Link>
+            <span className="t-mono text-smoke">{content.rights}</span>
           </div>
-          <LocaleToggle ariaLabel={localeSwitch} />
+          <LocaleToggle ariaLabel={localeSwitch} className="text-chalk" />
         </div>
       </div>
     </footer>

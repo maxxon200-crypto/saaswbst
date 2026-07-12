@@ -2,14 +2,24 @@ import { NextRequest, NextResponse } from "next/server";
 import { defaultLocale, locales } from "@/lib/i18n";
 
 /**
- * Locale routing without a library.
+ * Locale routing without a library, for the MARKETING zone only.
  *   - Default locale (en) is served at the clean root:  /  ,  /privacy
  *   - Non-default locales carry a prefix:                /it ,  /it/privacy
  * Internally every request is rewritten to /<locale>/... so a single
  * app/[locale] tree (with <html lang={locale}>) serves everything.
+ *
+ * The application zone is a separate deployment. Its paths are excluded here so
+ * the i18n rewrite never touches them, exactly as the spec requires.
  */
+const APP_PATHS = ["/projects", "/library", "/settings", "/login", "/api", "/share"];
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Never rewrite application routes into the [locale] tree.
+  if (APP_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`))) {
+    return NextResponse.next();
+  }
 
   // Canonicalise explicit default-locale URLs (/en, /en/foo) back to the root.
   if (pathname === `/${defaultLocale}` || pathname.startsWith(`/${defaultLocale}/`)) {

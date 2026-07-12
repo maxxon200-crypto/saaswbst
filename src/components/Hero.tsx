@@ -1,60 +1,46 @@
-import Image from "next/image";
 import { Button } from "./Button";
-import { heroBlurDataURL } from "@/lib/heroBlur";
+import { HeroCanvas } from "./HeroCanvas";
+import { APP_START } from "@/lib/links";
 import type { HeroContent } from "@/content/types";
 
 /**
- * Full-bleed hero.
- *
- * IMAGE NOTE: /public/images/hero.jpg is a neutral tonal PLACEHOLDER (not a
- * photograph, not AI-generated). Before launch, replace it with a licensed
- * Unsplash interior or a flat-lay of printed spec sheets, and give <Image> a
- * descriptive `alt`. remotePatterns for images.unsplash.com is already set up
- * in next.config if you prefer to point straight at a remote URL.
- *
- * The hero is intentionally NOT reveal-animated: it holds the LCP text and must
- * paint immediately.
+ * The one moment of theatre. Full viewport, --void ground, headline bottom-left
+ * at hero scale. Deliberately NOT reveal-animated — it holds the LCP text and
+ * must paint immediately. The wave field lives behind it (HeroCanvas).
  */
 export function Hero({ content }: { content: HeroContent }) {
   return (
-    <section className="relative flex min-h-[100svh] flex-col">
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <Image
-          src="/images/hero.jpg"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          placeholder="blur"
-          blurDataURL={heroBlurDataURL}
-          className="object-cover"
-        />
-        {/* Dark veil for text legibility: rgba(28,28,26,0.45) */}
-        <div className="absolute inset-0 bg-[var(--veil)]" />
-      </div>
+    <section
+      id="hero"
+      className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden bg-void"
+    >
+      <HeroCanvas />
 
-      <div className="shell relative flex flex-1 flex-col justify-end pb-16 pt-28 md:pb-24 md:pt-32">
-        <h1 className="max-w-[16ch] text-balance font-medium text-display leading-display tracking-display text-paper">
-          {content.headlinePre}
-          {/* The single accent word. On the dark veil it uses the flagged
-              lightened oxblood tint (--accent-tint) for contrast. */}
-          <span className="text-accent-tint">{content.headlineAccent}</span>
-          {content.headlinePost}
+      <div className="shell relative z-10 flex flex-1 flex-col justify-end pb-20 pt-32 md:pb-28">
+        <p className="t-mono mb-8 text-smoke">{content.eyebrow}</p>
+
+        <h1 className="t-hero uppercase text-chalk">
+          <span className="block">{content.line1}</span>
+          <span className="block">{content.line2}</span>
+          {/* The single accent word — the red used once, with intent. */}
+          <span className="block text-blood">{content.accent}</span>
         </h1>
 
-        <p className="mt-7 max-w-[46ch] text-lede text-paper">
-          {content.subline}
-        </p>
+        <p className="mt-9 max-w-[48ch] text-lede text-smoke">{content.subline}</p>
 
         <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
-          <Button href="#waitlist" variant="primary">
+          <Button href={APP_START} variant="primary">
             {content.primaryCta}
           </Button>
-          <Button href="#how-it-works" variant="outlineLight">
+          <Button href="#mechanism" variant="ghostChalk">
             {content.secondaryCta}
           </Button>
         </div>
       </div>
+
+      <span className="t-mono absolute bottom-7 right-[clamp(20px,5vw,80px)] z-10 text-smoke">
+        {content.corner}
+      </span>
     </section>
   );
 }

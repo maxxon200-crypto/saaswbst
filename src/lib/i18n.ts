@@ -14,4 +14,4 @@ export function localePath(locale: Locale, path = ""): string {
   return `/${locale}${clean}`;
 }
 
-export const SITE_URL = "https://capitolo.studio";
+export const SITE_URL = "https://metrica.studio";

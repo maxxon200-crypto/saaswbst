@@ -6,21 +6,22 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 /**
- * The site's entire motion system, in one place.
+ * The scroll + reveal motion system, in one place.
  *
- *   - Lenis smooth scroll (duration 1.1)
- *   - Exactly one reveal effect: fade + rise (24px), 0.8s, power2.out, on
- *     section entry, via GSAP ScrollTrigger.
- *   - Lenis and ScrollTrigger share ONE RAF loop (gsap.ticker).
+ * Motion budget honoured here:
+ *   2. Section entry — fade + rise 32px, 0.9s, power3.out, ScrollTrigger,
+ *      once:true (never re-triggers). Any [data-reveal] element gets it;
+ *      [data-reveal-delay] (seconds) staggers siblings.
+ *   5/anchor — Lenis smooth scroll + smooth in-page anchor jumps.
  *
- * Hard rules honoured here:
- *   - Content is visible by default in CSS. We only ever animate FROM a hidden
- *     state at runtime (gsap.from). With JS disabled nothing runs and the page
- *     renders complete.
- *   - prefers-reduced-motion: no Lenis, no reveals. Content is static + visible.
+ * Lenis and ScrollTrigger share ONE RAF loop (gsap.ticker).
  *
- * Any element tagged `data-reveal` gets the effect. Add `data-reveal-delay` (in
- * seconds) to stagger siblings.
+ * Hard rules:
+ *   - Content is visible by default in CSS; we only animate FROM hidden at
+ *     runtime. JS off → the page is complete and static.
+ *   - prefers-reduced-motion: no Lenis, no reveals, content static + visible.
+ *   - will-change is applied on animation start and removed on complete —
+ *     never left permanent.
  */
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -35,36 +36,52 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       smoothWheel: true,
     });
 
-    // One RAF loop drives both Lenis and ScrollTrigger.
     lenis.on("scroll", ScrollTrigger.update);
     const ticker = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(ticker);
     gsap.ticker.lagSmoothing(0);
 
-    // The single motion effect, scoped for clean teardown.
     const ctx = gsap.context(() => {
       const targets = gsap.utils.toArray<HTMLElement>("[data-reveal]");
       targets.forEach((el) => {
         const delay = parseFloat(el.dataset.revealDelay ?? "0") || 0;
         gsap.from(el, {
           opacity: 0,
-          y: 24,
-          duration: 0.8,
+          y: 32,
+          duration: 0.9,
           delay,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 85%",
-            once: true,
+          ease: "power3.out",
+          scrollTrigger: { trigger: el, start: "top 85%", once: true },
+          onStart: () => {
+            el.style.willChange = "transform, opacity";
+          },
+          onComplete: () => {
+            // Never leave will-change on — it eats GPU memory.
+            el.style.willChange = "auto";
           },
         });
       });
     });
 
+    // Smooth in-page anchor jumps (Sign-in/CTAs stay full navigations).
+    const onAnchorClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      const link = target?.closest('a[href^="#"]') as HTMLAnchorElement | null;
+      if (!link) return;
+      const id = link.getAttribute("href");
+      if (!id || id === "#") return;
+      const el = document.querySelector(id);
+      if (!el) return;
+      e.preventDefault();
+      lenis.scrollTo(el as HTMLElement, { offset: -72 });
+    };
+    document.addEventListener("click", onAnchorClick);
+
     // Fonts settle after first paint; refresh so triggers use final positions.
     ScrollTrigger.refresh();
 
     return () => {
+      document.removeEventListener("click", onAnchorClick);
       ctx.revert(); // restores every target to its natural, visible state
       gsap.ticker.remove(ticker);
       lenis.destroy();

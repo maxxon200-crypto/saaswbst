@@ -1,10 +1,16 @@
 import localFont from "next/font/local";
 
 /**
- * Satoshi Variable — the ONLY typeface on the site (no serif, no fallback
- * display face). Self-hosted from /public/fonts, loaded and optimised by
- * next/font/local. The woff2 carries a single `wght` axis spanning 300–900,
- * which covers every weight the design uses (400 body, 500–700 display).
+ * Two typefaces, both self-hosted from /public/fonts via next/font/local.
+ * No serif, no system-ui as display, no third face.
+ *
+ *   Satoshi Variable  — display + UI + body. One woff2, wght axis 300–900,
+ *                       which covers the 900 the hero demands and the 400/500
+ *                       used for body and labels.
+ *   JetBrains Mono    — data / technical. Labels, specs, dimensions, prices,
+ *                       section markers. This is what makes the site read as a
+ *                       technical drawing rather than a fashion parody. Latin
+ *                       subset (covers €, Italian accents) kept small.
  */
 export const satoshi = localFont({
   src: [
@@ -17,6 +23,19 @@ export const satoshi = localFont({
   display: "swap",
   variable: "--font-satoshi",
   preload: true,
-  // Generic fallback only for the brief swap window — never a display face.
   fallback: ["sans-serif"],
+});
+
+export const mono = localFont({
+  src: [
+    {
+      path: "../../public/fonts/JetBrainsMono-Variable.woff2",
+      weight: "100 800",
+      style: "normal",
+    },
+  ],
+  display: "swap",
+  variable: "--font-mono",
+  preload: true,
+  fallback: ["ui-monospace", "monospace"],
 });

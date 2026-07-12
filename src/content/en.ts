@@ -2,233 +2,217 @@ import type { Content } from "./types";
 
 export const en: Content = {
   meta: {
-    title: "Capitolo — FF&E specification for European studios",
+    title: "Metrica — Specification, without the copy-paste",
     description:
-      "The FF&E specification and procurement tool built in Milan for European studios. Structured product data, editorial spec books, and one approval link your clients will keep.",
+      "Metrica reads a manufacturer's PDF cut-sheet and fills the whole FF&E spec — dimensions, materials, finish, price, lead time. Export a spec book your client keeps. Built in Milan.",
+    ogAlt: "Metrica — specification, without the copy-paste.",
   },
 
   nav: {
-    wordmark: "CAPITOLO",
+    wordmark: "METRICA",
     links: [
-      { label: "How it works", href: "#how-it-works" },
+      { label: "Work", href: "#work" },
       { label: "Pricing", href: "#pricing" },
-      { label: "Manifesto", href: "#manifesto" },
     ],
+    signIn: "Sign in",
+    start: "Start",
     localeSwitch: "Change language",
   },
 
   hero: {
-    headlinePre: "Specification, made ",
-    headlineAccent: "beautifully",
-    headlinePost: ".",
+    eyebrow: "FF&E Specification — Milan",
+    line1: "Specification,",
+    line2: "without the",
+    accent: "copy-paste.",
     subline:
-      "The FF&E spec and procurement tool built in Milan for European studios.",
-    primaryCta: "Join the waitlist",
-    secondaryCta: "See how it works",
+      "Drop a manufacturer PDF. Get a complete spec. Export a book your client keeps.",
+    primaryCta: "Start free",
+    secondaryCta: "See it work",
+    corner: "EST. 2026 / MILANO",
+  },
+
+  demo: {
+    label: "The Mechanism",
+    headline: "One PDF in. A full spec out.",
+    columns: ["Brand", "Product", "Dimensions", "Finish", "Lead time", "Price"],
+    values: [
+      "FLOS",
+      "IC LIGHTS T1",
+      "Ø 300 × H 535 MM",
+      "BRUSHED BRASS",
+      "6–8 WEEKS",
+      "€ 890,00",
+    ],
+    caption: "PDF cut-sheet → complete specification. 4 seconds.",
+    replay: "Replay",
+    sheet: {
+      docType: "Technical data sheet",
+      designer: "Design — Michael Anastassiades",
+      specs: [
+        { k: "MODEL", v: "IC LIGHTS T1" },
+        { k: "TYPE", v: "TABLE LAMP" },
+        { k: "Ø", v: "300 MM" },
+        { k: "HEIGHT", v: "535 MM" },
+        { k: "MATERIAL", v: "BRASS, BLOWN GLASS" },
+        { k: "FINISH", v: "BRUSHED BRASS" },
+        { k: "SOURCE", v: "1 × G9 LED" },
+        { k: "IP", v: "IP20" },
+      ],
+    },
   },
 
   problem: {
-    label: "The problem",
-    title: "Your specs deserve better than a spreadsheet.",
+    label: "The Problem",
     columns: [
       {
-        title: "Hours lost re-typing product data.",
-        body: "Every schedule begins as a blank grid you fill by hand, copying dimensions and finishes from a dozen supplier tabs. Those hours add up to days you never billed for.",
+        figure: "3 Days",
+        body: "The average FF&E schedule takes three days of copy-paste. You bill design hours. You spend them typing.",
       },
       {
-        title: "Documents that undersell your work.",
-        body: "Your interiors are considered and exact; the spreadsheets that describe them are neither. Clients notice the gap before they notice the design.",
+        figure: "40 Items",
+        body: "Forty products. Forty PDFs. Forty rounds of transcription, each one a chance to get a dimension wrong.",
       },
       {
-        title: "Tools built for another continent.",
-        body: "The category leaders assume American brands, imperial units and dollar pricing. European studios are left translating everything twice.",
+        figure: "1 Spreadsheet",
+        body: "And at the end, a document that undersells the work inside it.",
       },
     ],
   },
 
-  how: {
-    label: "How it works",
-    steps: [
-      {
-        title: "Paste a link. Or drop the PDF.",
-        body: "Paste any supplier URL or drag in a manufacturer cut-sheet. Every spec — dimensions, finishes, lead times, trade price — lands in your schedule, structured and ready to edit.",
-        aiNote:
-          "Reads product pages and PDF cut-sheets — including the ones only European brands still publish.",
-        visual: "schedule",
-      },
-      {
-        title: "A library that speaks Italian.",
-        body: "Pre-enriched data for the brands you actually specify — B&B Italia, Cassina, Flos, Artemide, Molteni, Boffi — with correct metric dimensions, EUR trade pricing and descriptions in Italian and English.",
-        visual: "product",
-      },
-      {
-        title: "Documents your clients will keep.",
-        body: "Editorial spec books and schedules, typeset like publications and exported to PDF under your studio's name. One no-login link lets clients review and approve in a single click.",
-        visual: "specsheet",
-      },
-    ],
+  capabilities: {
+    label: "What it does",
+    reads: {
+      index: "01",
+      title: "Reads what others can't.",
+      body: "European brands publish specs as PDF cut-sheets. Every competing tool scrapes web pages and chokes on them. Metrica reads the PDF — the dimension line, the finish code, the price — and pulls the value out clean.",
+    },
+    library: {
+      index: "02",
+      title: "A library that speaks Italian.",
+      body: "B&B Italia. Cassina. Flos. Artemide. Molteni. Boffi. Correct millimetres, EUR trade pricing, IT/EN descriptions, pre-loaded — so the schedule starts half-built.",
+      brands: ["B&B ITALIA", "CASSINA", "FLOS", "ARTEMIDE", "MOLTENI", "BOFFI"],
+      brandAccentIndex: 2,
+    },
+    documents: {
+      index: "03",
+      title: "Documents they keep.",
+      body: "Spec books typeset like publications, exported under your studio's name. One link, and your client approves item by item — no PDF ping-pong, no lost versions.",
+    },
+    specBook: {
+      studio: "STUDIO MERIDIANA",
+      project: "PROJECT — VILLA COMO / LIVING",
+      item: "IC LIGHTS T1",
+      footer: "SPEC BOOK — 01 / 24",
+      rows: [
+        { k: "BRAND", v: "FLOS" },
+        { k: "DIMENSIONS", v: "Ø 300 × H 535 MM" },
+        { k: "FINISH", v: "BRUSHED BRASS" },
+        { k: "LEAD TIME", v: "6–8 WEEKS" },
+      ],
+    },
   },
 
   pricing: {
     label: "Pricing",
-    title: "Simple pricing. No per-seat games.",
     plans: [
       {
         name: "Solo",
         price: "€39",
-        cadence: "/mo",
-        rows: [
-          "One designer",
-          "Unlimited projects and schedules",
-          "Link and PDF extraction",
-          "PDF spec books under your name",
-          "Client approval links",
-        ],
+        cadence: "/ MO",
+        rows: ["1 seat", "150 extractions", "Full library"],
+        cta: "Start free",
       },
       {
         name: "Studio",
         price: "€79",
-        cadence: "/mo",
-        featuredLabel: "For most studios",
-        rows: [
-          "Up to five designers",
-          "Everything in Solo",
-          "European brand library",
-          "Shared studio templates",
-          "Priority support",
-        ],
+        cadence: "/ MO",
+        rows: ["Up to 5 seats", "600 extractions", "Studio branding"],
+        cta: "Start free",
+        featuredLabel: "Most studios",
       },
       {
         name: "Studio+",
         price: "€149",
-        cadence: "/mo",
-        rows: [
-          "Up to twelve designers",
-          "Everything in Studio",
-          "Custom document branding",
-          "Procurement and PO tracking",
-          "Onboarding session",
-        ],
+        cadence: "/ MO",
+        rows: ["Unlimited seats", "2,000 extractions", "Priority support"],
+        cta: "Start",
       },
     ],
-    note: "Launching 2026. Waitlist members get three months at half price.",
-    cta: "Join the waitlist",
+    note: "14-day trial. No card. No per-seat games.",
   },
 
   manifesto: {
     label: "Manifesto",
     lines: [
-      "We build in Milan, for the way European studios actually work.",
       "Specification is design work.",
-      "It deserves the same care as the rooms it describes.",
-      "A tool should meet the standard of the studios that use it.",
-      "So we made one thing, and made it properly.",
-      "Specs, made beautifully.",
+      "It should not feel like data entry.",
+      "We built the tool we wanted",
+      "in the city that makes the furniture.",
+      "Metrica. Milano.",
     ],
-  },
-
-  waitlist: {
-    label: "Waitlist",
-    title: "Be first. Spec better.",
-    lede: "Join the studios shaping Capitolo before launch. We build slowly, with a small group of designers we listen to.",
-    fields: {
-      email: "Email",
-      studioName: "Studio name",
-      country: "Country",
-      role: "Role",
-    },
-    optional: "Optional",
-    countryPlaceholder: "Select a country",
-    rolePlaceholder: "Select a role",
-    countryGroups: [
-      {
-        label: "European Union",
-        options: [
-          "Italy",
-          "France",
-          "Spain",
-          "Germany",
-          "Netherlands",
-          "Belgium",
-          "Austria",
-          "Portugal",
-          "Ireland",
-          "Sweden",
-          "Denmark",
-          "Finland",
-          "Greece",
-          "Poland",
-          "Czechia",
-          "Croatia",
-          "Slovenia",
-          "Luxembourg",
-        ],
-      },
-      {
-        label: "Elsewhere in Europe",
-        options: ["United Kingdom", "Switzerland", "Norway"],
-      },
-      {
-        label: "Other",
-        options: ["Other"],
-      },
-    ],
-    roles: ["Interior designer", "Architect", "Studio owner", "Other"],
-    submit: "Join the waitlist",
-    submitting: "Joining…",
-    success: "You're on the list. We'll be in touch from Milan.",
-    errors: {
-      email: "Enter a valid email address.",
-      generic: "Something went wrong. Please try again.",
-    },
+    accent: "Milano",
   },
 
   footer: {
+    wordmark: "METRICA",
+    email: "hello@metrica.studio",
     madeIn: "Made in Milan",
-    email: "hello@capitolo.studio",
     privacy: "Privacy",
-    rights: "Capitolo",
+    terms: "Terms",
+    rights: "© 2026 Metrica",
+    // No social icons — Metrica has no public profiles yet. Add links here only
+    // once real accounts exist.
+    socialNote: "",
   },
 
   privacy: {
-    label: "Privacy",
-    title: "Privacy notice",
-    updated: "Last updated: 2026",
-    reviewNote:
-      "Placeholder text for legal review. Replace with counsel-approved copy before launch.",
+    label: "Legal",
+    title: "Privacy",
+    updated: "Updated — January 2026",
     sections: [
       {
-        heading: "What the waitlist collects",
+        heading: "What we collect",
         body: [
-          "When you join the waitlist we collect the email address you enter, and optionally your studio name, country and role. We use this only to contact you about Capitolo's launch and early access.",
-          "We do not use these details for advertising, and we do not sell or share them with third parties for their own marketing.",
+          "Your account details — name, studio, email — and the product documents you upload for extraction. Nothing else.",
+          "We do not sell data, and we do not train third-party models on your uploads.",
         ],
       },
       {
-        heading: "Where your data is stored",
+        heading: "How extractions are handled",
         body: [
-          "Waitlist entries are stored in Supabase on infrastructure hosted within the European Union. Access is limited to the people building Capitolo.",
-        ],
-      },
-      {
-        heading: "How long we keep it",
-        body: [
-          "We keep waitlist details until launch and for a reasonable period afterwards to manage early access, then delete them. You can ask us to delete your details sooner at any time.",
-        ],
-      },
-      {
-        heading: "Your rights",
-        body: [
-          "Under the GDPR you can access, correct or delete the personal data we hold about you, and object to our use of it. To exercise any of these rights, email us and we will respond promptly.",
+          "Uploaded PDFs are processed to read their specification data and are retained only as long as your project needs them. You can delete a project, and its documents, at any time.",
         ],
       },
       {
         heading: "Contact",
-        body: [
-          "For any privacy question, or to have your details removed, write to hello@capitolo.studio.",
-        ],
+        body: ["Questions about your data: hello@metrica.studio."],
       },
     ],
-    backHome: "Back to home",
+    backHome: "Back home",
+  },
+
+  terms: {
+    label: "Legal",
+    title: "Terms",
+    updated: "Updated — January 2026",
+    sections: [
+      {
+        heading: "The service",
+        body: [
+          "Metrica is a specification tool for interior design and architecture studios. You keep ownership of everything you create — your schedules, your spec books, your client links.",
+        ],
+      },
+      {
+        heading: "Trials and billing",
+        body: [
+          "The trial runs 14 days, no card required. After that, plans bill monthly and can be cancelled at any time from your account.",
+        ],
+      },
+      {
+        heading: "Contact",
+        body: ["Questions about these terms: hello@metrica.studio."],
+      },
+    ],
+    backHome: "Back home",
   },
 };
