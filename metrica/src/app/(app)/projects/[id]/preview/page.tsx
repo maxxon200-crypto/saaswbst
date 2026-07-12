@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProjectBundle } from "@/lib/data/projects";
+import { PreviewClient } from "@/components/preview/PreviewClient";
 
-// Milestone 4 builds the React-PDF spec book preview + export here.
 export const dynamic = "force-dynamic";
 
 export default async function PreviewPage({ params }: { params: { id: string } }) {
@@ -20,11 +20,7 @@ export default async function PreviewPage({ params }: { params: { id: string } }
           Back to schedule
         </Link>
       </header>
-      <div className="mt-16 border-t border-line pt-20 text-center">
-        <p className="text-body text-stone">
-          The typeset spec book preview and PDF export arrive in Milestone 4.
-        </p>
-      </div>
+      <PreviewClient projectId={params.id} />
     </div>
   );
 }
